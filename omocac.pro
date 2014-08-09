@@ -18,13 +18,15 @@ SOURCES += main.cpp\
     normativephenotypicpart.cpp \
     normativegrid.cpp \
     externalfile.cpp \
-    simulation.cpp
+    simulation.cpp \
+    gridsubinterval.cpp
 
 HEADERS  += mainwindow.h \
     individual.h \
     normativephenotypicpart.h \
     normativegrid.h \
     externalfile.h \
-    simulation.h
+    simulation.h \
+    gridsubinterval.h
 
 FORMS    += mainwindow.ui

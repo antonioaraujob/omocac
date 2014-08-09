@@ -47,9 +47,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>20</y>
+      <y>10</y>
       <width>401</width>
-      <height>281</height>
+      <height>291</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -80,21 +80,14 @@
        <x>20</x>
        <y>40</y>
        <width>371</width>
-       <height>221</height>
+       <height>248</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="4" column="0">
-       <widget class="QLabel" name="label_7">
+      <item row="3" column="1">
+       <widget class="QLineEdit" name="lineEditMutationStd">
         <property name="text">
-         <string>Tamaño maximo del archivo externo</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>Tamaño de la poblacion</string>
+         <string>2</string>
         </property>
        </widget>
       </item>
@@ -105,30 +98,27 @@
         </property>
        </widget>
       </item>
+      <item row="7" column="1">
+       <widget class="QLineEdit" name="lineEditMatchPerTournament">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="readOnly">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="1">
+       <widget class="QLineEdit" name="lineEditGnormative">
+        <property name="text">
+         <string>20</string>
+        </property>
+       </widget>
+      </item>
       <item row="1" column="1">
        <widget class="QLineEdit" name="lineEditGenerationNumber">
         <property name="text">
          <string>3</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_3">
-        <property name="text">
-         <string>Numero maximo de generaciones</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QLineEdit" name="lineEditPopulationSize">
-        <property name="toolTip">
-         <string extracomment="[1..1000]"/>
-        </property>
-        <property name="whatsThis">
-         <string extracomment="[1..1000]"/>
-        </property>
-        <property name="text">
-         <string>10</string>
         </property>
        </widget>
       </item>
@@ -145,6 +135,20 @@
         </property>
        </widget>
       </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Tamaño de la poblacion</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_7">
+        <property name="text">
+         <string>Tamaño maximo del archivo externo</string>
+        </property>
+       </widget>
+      </item>
       <item row="3" column="0">
        <widget class="QLabel" name="label_5">
         <property name="text">
@@ -152,17 +156,10 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
-       <widget class="QLineEdit" name="lineEditMutationStd">
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>2</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="1">
-       <widget class="QLineEdit" name="lineEditExternalFileSize">
-        <property name="text">
-         <string>100</string>
+         <string>Numero maximo de generaciones</string>
         </property>
        </widget>
       </item>
@@ -173,10 +170,10 @@
         </property>
        </widget>
       </item>
-      <item row="5" column="1">
-       <widget class="QLineEdit" name="lineEditGridSubintervals">
+      <item row="7" column="0">
+       <widget class="QLabel" name="label_10">
         <property name="text">
-         <string>10</string>
+         <string>Numero de encuentros por individuo</string>
         </property>
        </widget>
       </item>
@@ -187,27 +184,44 @@
         </property>
        </widget>
       </item>
-      <item row="7" column="0">
-       <widget class="QLabel" name="label_10">
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="lineEditPopulationSize">
+        <property name="toolTip">
+         <string extracomment="[1..1000]"/>
+        </property>
+        <property name="whatsThis">
+         <string extracomment="[1..1000]"/>
+        </property>
         <property name="text">
-         <string>Numero de encuentros por individuo</string>
+         <string>10</string>
         </property>
        </widget>
       </item>
-      <item row="6" column="1">
-       <widget class="QLineEdit" name="lineEditGnormative">
+      <item row="5" column="1">
+       <widget class="QLineEdit" name="lineEditGridSubintervals">
         <property name="text">
-         <string>20</string>
+         <string>10</string>
         </property>
        </widget>
       </item>
-      <item row="7" column="1">
-       <widget class="QLineEdit" name="lineEditMatchPerTournament">
+      <item row="4" column="1">
+       <widget class="QLineEdit" name="lineEditExternalFileSize">
         <property name="text">
-         <string/>
+         <string>100</string>
         </property>
-        <property name="readOnly">
-         <bool>false</bool>
+       </widget>
+      </item>
+      <item row="8" column="0">
+       <widget class="QLabel" name="label_11">
+        <property name="text">
+         <string>Numero de APs desplegados</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="1">
+       <widget class="QLineEdit" name="lineEditApsNumber">
+        <property name="text">
+         <string>100</string>
         </property>
        </widget>
       </item>
@@ -218,7 +232,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>310</y>
+      <y>320</y>
       <width>581</width>
       <height>191</height>
      </rect>
