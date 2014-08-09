@@ -33,12 +33,15 @@ Simulation::Simulation(int population, int extFileSize, int generations, int sub
     deployedAPs = aps;
 
     normativePhenotipicPart = new NormativePhenotypicPart();
+
+    externalFile = new ExternalFile();
 }
 
 
 Simulation::~Simulation()
 {
-
+    delete normativePhenotipicPart;
+    delete nGrid;
 }
 
 void Simulation::initializePopulation()
@@ -86,6 +89,57 @@ void Simulation::initializeNormativePhenotypicPart()
            normativePhenotipicPart->getLowerF2(), normativePhenotipicPart->getUpperF2());
 
 }
+
+void Simulation::updateNormativePhenotypicPart()
+{
+    qDebug("Simulation::updateNormativePhenotypicPart");
+
+    QList<Individual *> extFileNonDominatedPopulation;
+
+    // obtener la lista de individuos no dominados del archivo externo
+    extFileNonDominatedPopulation = externalFile->getExternalFileList();
+
+    // ordenarlos los no dominados con respecto a la funcion objetivo 1 de menor a mayor
+    qSort(extFileNonDominatedPopulation.begin(), extFileNonDominatedPopulation.end(), xLessThanF1);
+
+    // tomar los limites inferior y superior
+    int lF1 = extFileNonDominatedPopulation.at(0)->getPerformanceDiscovery();
+    int uF1 = extFileNonDominatedPopulation.at(extFileNonDominatedPopulation.count()-1)->getPerformanceDiscovery();
+
+    // ordenarlos los no dominados con respecto a la funcion objetivo 2 de menor a mayor
+    qSort(extFileNonDominatedPopulation.begin(), extFileNonDominatedPopulation.end(), xLessThanF2);
+
+    int lF2 = extFileNonDominatedPopulation.at(0)->getPerformanceLatency();
+    int uF2 = extFileNonDominatedPopulation.at(extFileNonDominatedPopulation.count()-1)->getPerformanceLatency();
+
+    // asigna los extremos de las funciones objetivo con respecto a los individuos no dominados
+    normativePhenotipicPart->updateNormativePhenotypicPart(lF1, uF1, lF2, uF2);
+
+    qDebug("nueva parte fenotipica normativa:");
+    qDebug("| lF1: %f | uF1: %f | lF2: %f | uF2: %f |",
+           normativePhenotipicPart->getLowerF1(),normativePhenotipicPart->getUpperF1(),
+           normativePhenotipicPart->getLowerF2(), normativePhenotipicPart->getUpperF2());
+
+    // Reconstruir la rejilla con los nuevos valores de lowerF1, upperF1, lowerF2, upperF2.
+    delete nGrid;
+
+    // Reinicializar todos los contadores de la rejilla en cero.
+    nGrid = new NormativeGrid(gridSubintervalsNumber, normativePhenotipicPart);
+
+    nGrid->printGrid();
+
+    // Agregar todos los individuos del archivo externo al contador de su celda correspondiente.
+    // De esta manera el espacio de creencias está listo de nuevo para su uso.
+    updateGrid(extFileNonDominatedPopulation);
+
+    qDebug("++++++grid despues de actualizada con los individuos del archivo externo");
+    nGrid->printGrid();
+    qDebug("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+
+
+
+}
+
 
 void Simulation::initializeGrid()
 {
@@ -154,10 +208,6 @@ void Simulation::updateGrid(QList<Individual *> nonDominated)
     {
         auxIndividual = nonDominated.at(i);
         nGrid->addIndividualToGrid(auxIndividual);
-
-        //qDebug("===despues de agregar individuo");
-        //nGrid->printGrid();
-        //qDebug("===============================");
     }
 
 }
@@ -305,6 +355,12 @@ bool Simulation::individualDominate(Individual * xj, Individual * xi)
 }
 
 
+void Simulation::setExternalFile(ExternalFile * extFile)
+{
+    externalFile = extFile;
+}
 
-
-
+ExternalFile * Simulation::getExternalFile()
+{
+    return externalFile;
+}

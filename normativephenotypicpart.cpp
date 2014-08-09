@@ -77,6 +77,7 @@ void NormativePhenotypicPart::updateNormativePhenotypicPart(ExternalFile extFile
 
     lowerF2 = extFile.getLowerF2();
     upperF2 = extFile.getUpperF2();
+
 }
 
 

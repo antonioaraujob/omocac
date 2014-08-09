@@ -7,6 +7,7 @@
 #include "normativephenotypicpart.h"
 #include "gridsubinterval.h"
 #include "normativegrid.h"
+#include "externalfile.h"
 
 
 /**
@@ -82,6 +83,14 @@ private:
      */
     NormativeGrid * nGrid;
 
+    /**
+     * @brief Archivo externo de soluciones no dominadas
+     *
+     * Este archivo tendra como tamano maximo el valor de externalFileSize
+     * @see externalFileSize
+     */
+    ExternalFile * externalFile;
+
 public:
 
     /**
@@ -125,6 +134,11 @@ public:
 
 
     /**
+     * @brief Actualiza la parte fenotipica normativa
+     */
+    void updateNormativePhenotypicPart();
+
+    /**
      * Inicializar la rejilla del espacio de creencias.
      *
      * La rejilla se crea tomando como intervalos los valores almacenados en la parte
@@ -140,7 +154,7 @@ public:
 
     /**
      * @brief Actualiza la rejilla del espacio de creencias
-     * @param
+     * @param nonDominated lista de individuos no dominados
      */
     void updateGrid(QList<Individual *> nonDominated);
 
@@ -189,7 +203,17 @@ public:
      */
     bool individualDominate(Individual * xj, Individual * xi);
 
+    /**
+     * @brief Asigna el archivo externo a la clase Simulation
+     * @param extFile puntero al archivo externo a asignar
+     */
+    void setExternalFile(ExternalFile * extFile);
 
+    /**
+     * @brief Devuelve el archivo externo de la clase Simulation
+     * @return Puntero al archivo externo de la clase Simulation
+     */
+    ExternalFile * getExternalFile();
 };
 
 #endif // SIMULATION_H

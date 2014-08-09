@@ -36,3 +36,18 @@ double ExternalFile::getUpperF2()
 {
     return 1.0;
 }
+
+
+QList<Individual *> ExternalFile::getExternalFileList()
+{
+    return externalFileNonDominatedList;
+}
+
+
+void ExternalFile::addNonDominatedIndividuals(Individual * ind)
+{
+    // verificar las condiciones para agregar
+
+    externalFileNonDominatedList.append(ind);
+}
+

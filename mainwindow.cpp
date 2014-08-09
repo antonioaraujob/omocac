@@ -89,13 +89,25 @@ MainWindow::MainWindow(QWidget *parent) :
     simulation->initializeGrid();
     qDebug("...se acaba de inicializar la grid");
 
-
     simulation->updateGrid(nonDominatedList);
     qDebug("...se acaba de agregar un individuo a la grid");
 
     simulation->printGrid();
     qDebug("Numero de individuos en la poblacion no dominada:");
     qDebug(qPrintable(QString::number(nonDominatedList.count())));
+
+    // instancia de archivo externo
+    ExternalFile * extFile = new ExternalFile();
+    extFile->addNonDominatedIndividuals(nonDominatedList.at(0));
+    extFile->addNonDominatedIndividuals(nonDominatedList.at(1));
+    qDebug("despues de extFile->addNonDominatedIndividuals");
+
+    simulation->setExternalFile(extFile);
+
+    simulation->updateNormativePhenotypicPart();
+    qDebug("despues de updateNormativePhenotypicPart()");
+
+    simulation->printGrid();
 
 }
 

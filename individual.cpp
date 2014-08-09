@@ -35,7 +35,7 @@ Individual::Individual(int numberOfApsDeployed)
 
 Individual::Individual(Individual &p)
 {
-    for (int i=0; i<33; i++)
+    for (int i=0; i<44; i++)
     {
         parametersList.append(p.getParameter(i));
     }

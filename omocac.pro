@@ -11,6 +11,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = omocac
 TEMPLATE = app
 
+QMAKE_CXXFLAGS += -std=c++11
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -19,7 +20,8 @@ SOURCES += main.cpp\
     normativegrid.cpp \
     externalfile.cpp \
     simulation.cpp \
-    gridsubinterval.cpp
+    gridsubinterval.cpp \
+    mutation.cpp
 
 HEADERS  += mainwindow.h \
     individual.h \
@@ -27,6 +29,7 @@ HEADERS  += mainwindow.h \
     normativegrid.h \
     externalfile.h \
     simulation.h \
-    gridsubinterval.h
+    gridsubinterval.h \
+    mutation.h
 
 FORMS    += mainwindow.ui
