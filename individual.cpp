@@ -39,6 +39,15 @@ Individual::Individual(Individual &p)
     {
         parametersList.append(p.getParameter(i));
     }
+
+    // calcular el valor de desempeno para el individuo
+    calculatePerformanceValue();
+
+    // calcular el valor de desempeno para la descubierta
+    setPerformanceDiscovery(getRandomMaxChannelTime());
+
+    // calcular el valor de desempeno para la latencia
+    setPerformanceLatency(getRandomMaxChannelTime());
 }
 
 int Individual::getRandomChannel()

@@ -8,6 +8,8 @@
 #include "gridsubinterval.h"
 #include "normativegrid.h"
 #include "externalfile.h"
+#include "mutation.h"
+#include "selection.h"
 
 
 /**
@@ -74,6 +76,11 @@ private:
     QList<Individual *> populationList;
 
     /**
+     * Lista de la poblacion de individuos mutados
+     */
+    QList<Individual *> mutatedPopulationList;
+
+    /**
      * Parte Normativa Fenotipica del espacio de creencias
      */
     NormativePhenotypicPart * normativePhenotipicPart;
@@ -90,6 +97,22 @@ private:
      * @see externalFileSize
      */
     ExternalFile * externalFile;
+
+    /**
+     * @brief Mutacion de la poblacion.
+     *
+     * Este objeto se encargara de crear una nueva poblacion de tamano 2p a partir
+     * de la poblacion de tamano p. Se utiliza la mutacion gausiana.
+     */
+    Mutation * mutation;
+
+    /**
+     * @brief Seleccion de la poblacion
+     *
+     *  Este objeto se encarga de realizar la seleccion de P individuos a partir de la
+     * poblacion 2P considerando los torneos y el espacio de creencias.
+     */
+    Selection * selection;
 
 public:
 
@@ -165,10 +188,23 @@ public:
 
 
     // generacion hijos
+    /**
+     * @brief Realiza la mutacion sobre la poblacion de tamano p y genera una nueva
+     * poblacion de tamano 2p
+     */
+    void mutatePopulation();
 
     // evaluar hijos
 
     // hacer torneos
+    /**
+     * @brief Realiza el proceso de seleccion de P individuos a partir de la poblacion 2P
+     * generada con la @see mutatePopulation.
+     *
+     * Para la seleccion se considera la seleccion por torneos y el espacio de creencias
+     */
+    void selectPopulation();
+
 
     // seleccionar ganadores de torneos
 
@@ -214,6 +250,21 @@ public:
      * @return Puntero al archivo externo de la clase Simulation
      */
     ExternalFile * getExternalFile();
+
+    /**
+     * @brief Retorna la desviacion estandar de una variabla aleatoria distribuida normal.
+     *
+     * Esta desviacion es un parametro de la simulacion introducido por el usuario
+     *
+     * @return desviacion estandar
+     */
+    double getStdDeviation();
+
+    /**
+     * @brief Imprime la poblacion actual
+     */
+    void printPopulation();
+
 };
 
 #endif // SIMULATION_H

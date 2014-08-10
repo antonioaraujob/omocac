@@ -14,7 +14,7 @@ Mutation::~Mutation()
 
 }
 
-void Mutation::doMutation(QList<Individual *> population, double std)
+void Mutation::doMutation(QList<Individual *> population, double std, int deployedAp)
 {
     newPopulation.clear();
 
@@ -23,14 +23,22 @@ void Mutation::doMutation(QList<Individual *> population, double std)
 
     qDebug(" ----- doMutation: tamano inicial de newPopulation %d", newPopulation.count());
 
+    int newParameterValue = 0;
+
     // recorrer la lista de poblacion
     for (int i=0; i<population.count(); i++)
     {
-
         father = population.at(i);
 
         // crear un individuo (offspring) y mutar todos sus parametros
         // TODO
+        for (int i=0; i<father->getNumberOfParameters(); i++)
+        {
+            offspring = new Individual(deployedAp);
+            newParameterValue = mutateIndividualParameter(i, 0 /*father->getParameter(i)*/,std);
+
+            offspring->setParameter(i, newParameterValue);
+        }
 
 
         // agregar el individuo padre y el individuo hijo a la lista newPopulation
@@ -189,5 +197,11 @@ bool Mutation::isThisParameterAPs(int index)
     }
 }
 
-
+void Mutation::printNewPopulation()
+{
+    for (int i = 0; i < newPopulation.count(); i++)
+    {
+        newPopulation.at(i)->printIndividual();
+    }
+}
 

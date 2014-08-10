@@ -3,6 +3,7 @@
 
 #include "externalfile.h"
 
+
 /**
  * Clase que modela la Parte Fenotipica Normativa.
  *
@@ -130,6 +131,7 @@ public:
      * @param extFile ExternalFile para obtener los limites de las funciones objetivo
      */
     void updateNormativePhenotypicPart(ExternalFile extFile);
+
 
 
 };

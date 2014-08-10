@@ -31,13 +31,15 @@ public:
     ~Mutation();
 
     /**
-     * @brief Ejecuta el proceso de mutacion sobre la poblacion pasada como argumento
+     * @brief Ejecuta el proceso de mutacion sobre la poblacion pasada como argumento.
+     *
+     * La nueva poblacion de tamano 2P se almacenara en @see newPopulation
+     *
      * @param population poblacion sobre la cual se ejecuta el proceso de mutacion
-     * @param sKnowledge
-     * @param nKnowledge
      * @param std desviacion estandar de la variable aleatoria normal
+     * @param deployedAp numero de AP desplegados en el entorno
      */
-    void doMutation(QList<Individual *> population, double std);
+    void doMutation(QList<Individual *> population, double std, int deployedAp);
 
 
     /**
@@ -93,6 +95,11 @@ public:
      * @return Verdadero si el indice corresponde a un parametro de APs
      */
     bool isThisParameterAPs(int index);
+
+    /**
+     * @brief Imprime en una cadena legible al humano la nueva poblacion de tamano 2p
+     */
+    void printNewPopulation();
 
 };
 

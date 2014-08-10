@@ -7,6 +7,15 @@ using namespace std;
 
 NormativeGrid::NormativeGrid(int subIntervals, NormativePhenotypicPart * nPhenotypicPart)
 {
+
+    lowerF1 = nPhenotypicPart->getLowerF1();
+
+    upperF1 = nPhenotypicPart->getUpperF1();
+
+    lowerF2 = nPhenotypicPart->getLowerF2();
+
+    upperF2 = nPhenotypicPart->getUpperF2();
+
     subIntervalNumber = subIntervals;
 
 
@@ -184,3 +193,45 @@ void NormativeGrid::printGrid()
         row.clear();
     }
 }
+
+
+bool NormativeGrid::individualInsideGrid(Individual * individual)
+{
+    // lowerF1 <= individual->getPerformanceDiscovery() <= upperF1
+    // lowerF2 <= individual->getPerformanceLatency() <= upperF2
+    if ( ( (individual->getPerformanceDiscovery() >= lowerF1) && (individual->getPerformanceDiscovery() <= upperF1) ) &&
+        ( (individual->getPerformanceLatency() >= lowerF2) && (individual->getPerformanceLatency() <= upperF2) ) )
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+
+}
+
+int NormativeGrid::getCountOfCell(Individual * individual)
+{
+    qDebug("...NormativeGrid::getCountOfCell");
+    double f1 = individual->getPerformanceDiscovery();
+    double f2 = individual->getPerformanceLatency();
+
+    // encontrar el subintervalo de F1 y de F2
+    int indexF1 = getF1SubintervalIndex(f1);
+    int indexF2 = getF2SubintervalIndex(f2);
+
+    if ( (indexF1 == -1) || (indexF2 == -1) )
+    {
+        return 0;
+    }
+    else
+    {
+        return getCount(indexF1, indexF2);
+    }
+
+}
+
+
+
+

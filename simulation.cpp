@@ -1,13 +1,24 @@
 #include "simulation.h"
 
 
-// Funcion de comparacion de individuos con respecto al valor de desempeno de descubrimiento
+/**
+ * @brief Funcion de comparacion de individuos con respecto al valor de desempeno de descubrimiento
+ * @param p1 Individuo 1 a comparar
+ * @param p2 Individuo 2 a comparar
+ * @return Verdadero si p1 es menor que p2 con respecto a la funcion objetivo de descubrimiento
+ */
 inline static bool xLessThanF1(Individual *p1, Individual *p2)
 {
     return p1->getPerformanceDiscovery() < p2->getPerformanceDiscovery();
 }
 
-// Funcion de comparacion de individuos con respecto al valor de desempeno de latencia
+
+/**
+ * @brief Funcion de comparacion de individuos con respecto al valor de desempeno de latencia
+ * @param p1 Individuo 1 a comparar
+ * @param p2 Individuo 2 a comparar
+ * @return Verdadero si p1 es menor que p2 con respecto a la funcion objetivo de latencia
+ */
 inline static bool xLessThanF2(Individual *p1, Individual *p2)
 {
     return p1->getPerformanceLatency() < p2->getPerformanceLatency();
@@ -35,6 +46,11 @@ Simulation::Simulation(int population, int extFileSize, int generations, int sub
     normativePhenotipicPart = new NormativePhenotypicPart();
 
     externalFile = new ExternalFile();
+
+    mutation = new Mutation();
+
+    selection = new Selection();
+
 }
 
 
@@ -42,6 +58,8 @@ Simulation::~Simulation()
 {
     delete normativePhenotipicPart;
     delete nGrid;
+    delete externalFile;
+    delete mutation;
 }
 
 void Simulation::initializePopulation()
@@ -217,6 +235,22 @@ void Simulation::printGrid()
     nGrid->printGrid();
 }
 
+void Simulation::mutatePopulation()
+{
+    mutation->doMutation(populationList, getStdDeviation(), deployedAPs);
+
+    mutatedPopulationList = mutation->getNewPopulation();
+
+    mutation->printNewPopulation();
+}
+
+void Simulation::selectPopulation()
+{
+    selection->doSelection(mutatedPopulationList, matchesPerIndividuals, nGrid);
+
+    populationList = selection->getSelectedPopulation();
+}
+
 
 bool Simulation::stopEvolution()
 {
@@ -363,4 +397,19 @@ void Simulation::setExternalFile(ExternalFile * extFile)
 ExternalFile * Simulation::getExternalFile()
 {
     return externalFile;
+}
+
+
+double Simulation::getStdDeviation()
+{
+    return stdDeviation;
+}
+
+
+void Simulation::printPopulation()
+{
+    for (int i = 0; i < populationList.count(); i++)
+    {
+        populationList.at(i)->printIndividual();
+    }
 }

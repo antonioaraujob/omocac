@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     externalfile.cpp \
     simulation.cpp \
     gridsubinterval.cpp \
-    mutation.cpp
+    mutation.cpp \
+    selection.cpp
 
 HEADERS  += mainwindow.h \
     individual.h \
@@ -30,6 +31,7 @@ HEADERS  += mainwindow.h \
     externalfile.h \
     simulation.h \
     gridsubinterval.h \
-    mutation.h
+    mutation.h \
+    selection.h
 
 FORMS    += mainwindow.ui

@@ -15,6 +15,26 @@ class NormativeGrid
 private:
 
     /**
+     * Limite inferior de la funcion objetivo 1
+     */
+    double lowerF1;
+
+    /**
+     * Limite superior de la funcion objetivo 2
+     */
+    double upperF1;
+
+    /**
+     * Limite inferior de la funcion objetivo 2
+     */
+    double lowerF2;
+
+    /**
+     * Limite superior de la funcion objetivo2
+     */
+    double upperF2;
+
+    /**
      * Numero de intervalos para construir la rejilla
      */
     int subIntervalNumber;
@@ -115,6 +135,20 @@ public:
      */
     void printGrid();
 
+    /**
+     * @brief Retorna verdadero si el individuo pasado como argumento esta en la rejilla
+     * @param individual Individuo que se desea encontrar en la rejilla
+     * @return Verdadero si el individuo esta en la rejilla
+     */
+    bool individualInsideGrid(Individual * individual);
+
+    /**
+     * @brief Retorna el contador de la celda en la que se encuentra el individuo pasado como
+     * argumento
+     * @param individual Individuo del que se desea determinar el contador de la celda en la rejilla
+     * @return Numero de elementos en la celda a la que pertenece el individuo
+     */
+    int getCountOfCell(Individual * individual);
 };
 
 #endif // NORMATIVEGRID_H

@@ -59,7 +59,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->lineEditApsNumber->setToolTip("[1..100]");
 
 
-    //qsrand((uint)QTime::currentTime().msec());
+    qsrand((uint)QTime::currentTime().msec());
 
 
     // creacion del objeto simulacion
@@ -83,11 +83,34 @@ MainWindow::MainWindow(QWidget *parent) :
         nonDominatedList.at(i)->printIndividual();
     }
 
+
+
     simulation->initializeNormativePhenotypicPart();
     qDebug("...se acaba de inicializar la parte normativa fenotipica del espacio de creencias");
 
     simulation->initializeGrid();
     qDebug("...se acaba de inicializar la grid");
+
+
+    simulation->mutatePopulation();
+    qDebug("despues de simulation->mutatePopulation()");
+
+
+    simulation->selectPopulation();
+    qDebug("despues de simulation->selectPopulation()");
+    simulation->printPopulation();
+
+
+    nonDominatedList = simulation->getNonDominatedPopulationApproach1();
+    qDebug("Numero de individuos en la poblacion no dominada:");
+    qDebug(qPrintable(QString::number(nonDominatedList.count())));
+    for (int i = 0; i < nonDominatedList.count(); i++)
+    {
+        nonDominatedList.at(i)->printIndividual();
+    }
+
+return;
+
 
     simulation->updateGrid(nonDominatedList);
     qDebug("...se acaba de agregar un individuo a la grid");
