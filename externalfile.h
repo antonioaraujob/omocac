@@ -14,6 +14,11 @@ class ExternalFile
 private:
 
     /**
+     * @brief Tamano maximo del archivo externo
+     */
+    int maxExternalFileSize;
+
+    /**
      * @brief Lista de individuos no dominados
      */
     QList<Individual *> externalFileNonDominatedList;
@@ -23,7 +28,7 @@ public:
     /**
     * Constructor de la clase
     */
-    ExternalFile();
+    ExternalFile(int externalFileSize);
 
     /**
      * Destructor de la clase
@@ -72,13 +77,63 @@ public:
     /**
      * @brief Agregar el individuo pasado como argumento si cumple con las condiciones.
      *
-     *
-     *
      * @param ind individuo no dominado que se debe agregar al archivo externo
      */
     void addNonDominatedIndividuals(Individual * ind);
 
+    /**
+     * @brief Agrega los individuos no dominados de la lista pasada como argumento al archivo
+     * externo.
+     *
+     * Se siguen las reglas para insertar los individuos en el archivl externo
+     *
+     * @param nonDominatedList Lista de individuos no dominados a agregar
+     */
+    void addNonDominatedIndividuals(QList<Individual *> nonDominatedListToInsert);
 
+    /**
+     * @brief Retorna verdadero si el individuo pasado como argumento esta dominado por algun
+     * individuo existente en el archivo externo.
+     *
+     * @param individual Individuo a verificar si es dominado
+     * @return Verdadero si el individuo argumento esta dominado por algun individuo existente
+     * en el archivo externo
+     */
+    bool isNewIndividualDominatedByExternalFile(Individual * newIndividual);
+
+    /**
+     * Retorna si el individuo xj domina al individuo xi
+     * @param xj Individuo 1
+     * @param xi Individuo 2
+     * @return Verdadero si individuo xj domina a xi
+     */
+    bool individualDominate(Individual * xj, Individual * xi);
+
+    /**
+     * @brief Retorna verdadero si el individuo pasado como argumento domina a algun
+     * individuo existente en el archivo externo.
+     *
+     * @param newIndividual Individuo para verificar si domina a alguno existente en el archivo externo
+     * @return Verdadero si individuo pasado como argumento domina a algun individuo
+     * existente en el archivo externo.
+     */
+    bool newIndividualDominatesAnyoneInExternalFile(Individual * newIndividual);
+
+    /**
+     * @brief Agrega un individuo que domina el archivo externo y sigue verificando si
+     * hay otros individuos dominados para eliminarlos
+     *
+     * @param newIndividual Individuo para verificar si domina a alguno existente en el archivo externo
+     */
+    void addNewIndividualAndCheck(Individual * newIndividual);
+
+    /**
+     * @brief Retorna verdadero si el individuo pasado como argumento no domina a nadie ni nadie
+     * lo domina a el
+     *
+     * @param newIndividual Individuo para verificar si domina a alguien o lo dominan a el
+     */
+    bool newIndividualNotDominatedNotDominates(Individual * newIndividual);
 };
 
 #endif // EXTERNALFILE_H

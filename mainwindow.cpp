@@ -120,7 +120,7 @@ return;
     qDebug(qPrintable(QString::number(nonDominatedList.count())));
 
     // instancia de archivo externo
-    ExternalFile * extFile = new ExternalFile();
+    ExternalFile * extFile = new ExternalFile(ui->lineEditExternalFileSize->text().toInt());
     extFile->addNonDominatedIndividuals(nonDominatedList.at(0));
     extFile->addNonDominatedIndividuals(nonDominatedList.at(1));
     qDebug("despues de extFile->addNonDominatedIndividuals");

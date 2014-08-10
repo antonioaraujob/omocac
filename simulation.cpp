@@ -45,7 +45,7 @@ Simulation::Simulation(int population, int extFileSize, int generations, int sub
 
     normativePhenotipicPart = new NormativePhenotypicPart();
 
-    externalFile = new ExternalFile();
+    externalFile = new ExternalFile(extFileSize);
 
     mutation = new Mutation();
 
