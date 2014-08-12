@@ -33,6 +33,8 @@ Simulation::Simulation(int population, int extFileSize, int generations, int sub
 
     generationsMax = generations;
 
+    currentGeneration = 1;
+
     gridSubintervalsNumber = subintervalsGrid;
 
     gNormative = genNormative;
@@ -51,6 +53,13 @@ Simulation::Simulation(int population, int extFileSize, int generations, int sub
 
     selection = new Selection();
 
+    qDebug("Simulation:");
+    qDebug("    tamano de la poblacion: %d", populationSize);
+    qDebug("    numero de generaciones: %d", generationsMax);
+    qDebug("    Gnormative: %d", gNormative);
+    qDebug("    numero de torneos por individuo: %d", matchesPerIndividuals);
+    qDebug("    desviacion estandar: %d", stdDeviation);
+    qDebug("    numero de APs desplegados: %d", deployedAPs);
 }
 
 
@@ -77,6 +86,10 @@ void Simulation::initializePopulation()
     //return populationList;
 }
 
+QList<Individual *>  Simulation::getPopulationList()
+{
+    return populationList;
+}
 
 void Simulation::initializeNormativePhenotypicPart()
 {
@@ -86,14 +99,14 @@ void Simulation::initializeNormativePhenotypicPart()
 
     initialNonDominatedPopulation = getNonDominatedPopulationApproach1();
 
-    // ordenarlos los no dominados con respecto a la funcion objetivo 1 de menor a mayor
+    // ordenar los no dominados con respecto a la funcion objetivo 1 de menor a mayor
     qSort(initialNonDominatedPopulation.begin(), initialNonDominatedPopulation.end(), xLessThanF1);
 
     // tomar los limites inferior y superior
     int lF1 = initialNonDominatedPopulation.at(0)->getPerformanceDiscovery();
     int uF1 = initialNonDominatedPopulation.at(initialNonDominatedPopulation.count()-1)->getPerformanceDiscovery();
 
-    // ordenarlos los no dominados con respecto a la funcion objetivo 2 de menor a mayor
+    // ordenar los no dominados con respecto a la funcion objetivo 2 de menor a mayor
     qSort(initialNonDominatedPopulation.begin(), initialNonDominatedPopulation.end(), xLessThanF2);
 
     int lF2 = initialNonDominatedPopulation.at(0)->getPerformanceLatency();
@@ -107,57 +120,6 @@ void Simulation::initializeNormativePhenotypicPart()
            normativePhenotipicPart->getLowerF2(), normativePhenotipicPart->getUpperF2());
 
 }
-
-void Simulation::updateNormativePhenotypicPart()
-{
-    qDebug("Simulation::updateNormativePhenotypicPart");
-
-    QList<Individual *> extFileNonDominatedPopulation;
-
-    // obtener la lista de individuos no dominados del archivo externo
-    extFileNonDominatedPopulation = externalFile->getExternalFileList();
-
-    // ordenarlos los no dominados con respecto a la funcion objetivo 1 de menor a mayor
-    qSort(extFileNonDominatedPopulation.begin(), extFileNonDominatedPopulation.end(), xLessThanF1);
-
-    // tomar los limites inferior y superior
-    int lF1 = extFileNonDominatedPopulation.at(0)->getPerformanceDiscovery();
-    int uF1 = extFileNonDominatedPopulation.at(extFileNonDominatedPopulation.count()-1)->getPerformanceDiscovery();
-
-    // ordenarlos los no dominados con respecto a la funcion objetivo 2 de menor a mayor
-    qSort(extFileNonDominatedPopulation.begin(), extFileNonDominatedPopulation.end(), xLessThanF2);
-
-    int lF2 = extFileNonDominatedPopulation.at(0)->getPerformanceLatency();
-    int uF2 = extFileNonDominatedPopulation.at(extFileNonDominatedPopulation.count()-1)->getPerformanceLatency();
-
-    // asigna los extremos de las funciones objetivo con respecto a los individuos no dominados
-    normativePhenotipicPart->updateNormativePhenotypicPart(lF1, uF1, lF2, uF2);
-
-    qDebug("nueva parte fenotipica normativa:");
-    qDebug("| lF1: %f | uF1: %f | lF2: %f | uF2: %f |",
-           normativePhenotipicPart->getLowerF1(),normativePhenotipicPart->getUpperF1(),
-           normativePhenotipicPart->getLowerF2(), normativePhenotipicPart->getUpperF2());
-
-    // Reconstruir la rejilla con los nuevos valores de lowerF1, upperF1, lowerF2, upperF2.
-    delete nGrid;
-
-    // Reinicializar todos los contadores de la rejilla en cero.
-    nGrid = new NormativeGrid(gridSubintervalsNumber, normativePhenotipicPart);
-
-    nGrid->printGrid();
-
-    // Agregar todos los individuos del archivo externo al contador de su celda correspondiente.
-    // De esta manera el espacio de creencias está listo de nuevo para su uso.
-    updateGrid(extFileNonDominatedPopulation);
-
-    qDebug("++++++grid despues de actualizada con los individuos del archivo externo");
-    nGrid->printGrid();
-    qDebug("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-
-
-
-}
-
 
 void Simulation::initializeGrid()
 {
@@ -211,6 +173,58 @@ void Simulation::initializeGrid()
 
 }
 
+
+void Simulation::updateNormativePhenotypicPart()
+{
+    qDebug("Simulation::updateNormativePhenotypicPart");
+
+    QList<Individual *> extFileNonDominatedPopulation;
+
+    // obtener la lista de individuos no dominados del archivo externo
+    extFileNonDominatedPopulation = externalFile->getExternalFileList();
+
+    // ordenarlos los no dominados con respecto a la funcion objetivo 1 de menor a mayor
+    qSort(extFileNonDominatedPopulation.begin(), extFileNonDominatedPopulation.end(), xLessThanF1);
+
+    // tomar los limites inferior y superior
+    int lF1 = extFileNonDominatedPopulation.at(0)->getPerformanceDiscovery();
+    int uF1 = extFileNonDominatedPopulation.at(extFileNonDominatedPopulation.count()-1)->getPerformanceDiscovery();
+
+    // ordenarlos los no dominados con respecto a la funcion objetivo 2 de menor a mayor
+    qSort(extFileNonDominatedPopulation.begin(), extFileNonDominatedPopulation.end(), xLessThanF2);
+
+    int lF2 = extFileNonDominatedPopulation.at(0)->getPerformanceLatency();
+    int uF2 = extFileNonDominatedPopulation.at(extFileNonDominatedPopulation.count()-1)->getPerformanceLatency();
+
+    // asigna los extremos de las funciones objetivo con respecto a los individuos no dominados
+    normativePhenotipicPart->updateNormativePhenotypicPart(lF1, uF1, lF2, uF2);
+
+    qDebug("nueva parte fenotipica normativa:");
+    qDebug("| lF1: %f | uF1: %f | lF2: %f | uF2: %f |",
+           normativePhenotipicPart->getLowerF1(),normativePhenotipicPart->getUpperF1(),
+           normativePhenotipicPart->getLowerF2(), normativePhenotipicPart->getUpperF2());
+
+    // Reconstruir la rejilla con los nuevos valores de lowerF1, upperF1, lowerF2, upperF2.
+    delete nGrid;
+
+    // Reinicializar todos los contadores de la rejilla en cero.
+    nGrid = new NormativeGrid(gridSubintervalsNumber, normativePhenotipicPart);
+
+    nGrid->printGrid();
+
+    // Agregar todos los individuos del archivo externo al contador de su celda correspondiente.
+    // De esta manera el espacio de creencias está listo de nuevo para su uso.
+    updateGrid(extFileNonDominatedPopulation);
+
+    qDebug("++++++grid despues de actualizada con los individuos del archivo externo");
+    nGrid->printGrid();
+    qDebug("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+
+
+
+}
+
+
 void Simulation::updateGrid(QList<Individual *> nonDominated)
 {
 /*
@@ -225,6 +239,13 @@ void Simulation::updateGrid(QList<Individual *> nonDominated)
     for (int i=0; i<nonDominated.count(); i++)
     {
         auxIndividual = nonDominated.at(i);
+
+        if(!nGrid->individualInsideGrid(auxIndividual))
+        {
+            qDebug("%%%%%%%% el individuo no pertenece a la grid");
+            auxIndividual->printIndividual();
+        }
+
         nGrid->addIndividualToGrid(auxIndividual);
     }
 
@@ -252,9 +273,24 @@ void Simulation::selectPopulation()
 }
 
 
+void Simulation::addNonDominatedIndividualsToExternalFile(QList<Individual *> ndIndividualList)
+{
+    externalFile->addNonDominatedIndividuals(ndIndividualList, nGrid);
+}
+
+void Simulation::incrementGeneration()
+{
+    currentGeneration++;
+}
+
+int Simulation::getCurrentGenerationNumber()
+{
+    return currentGeneration;
+}
+
 bool Simulation::stopEvolution()
 {
-    if (currentGeneration == generationsMax)
+    if (currentGeneration > generationsMax)
         return true;
     else
         return false;
@@ -272,9 +308,69 @@ QList<Individual *> Simulation::getNonDominatedPopulationApproach1()
     Individual * individualI;
     Individual * individualJ;
 
+    for (int i=0; i<p; i++)
+    {
+        bool dominated = false;
+        individualI = populationList.at(i);
+
+        for (int j=0; ((j<p) && (!dominated)); j++)
+        {
+
+            if (i==j)
+            {
+                continue;
+            }
+            individualJ = populationList.at(j);
+            if (individualDominate(individualJ, individualI))
+            {
+                dominated = true;
+            }
+        }
+        if (!dominated)
+        {
+            nonDominatedPopulation.append(individualI);
+        }
+    }
+    return nonDominatedPopulation;
+
+
+ // ---------------------- original
+/*
     int i = 0;
     int j;
 
+    while(i < p)
+    {
+        j = 0;
+
+        individualI = populationList.at(i);
+
+        while (j < p)
+        {
+            if (j != i)
+            {
+                //if ( individualDominate(Individual * xj, Individual * xi) )
+                individualJ = populationList.at(j);
+                if ( individualDominate(individualJ, individualI) )
+                {
+                    i++;
+                    //if (i==p)
+                    //    break;
+                }
+            }
+            j++;
+        }
+        if (j == p)
+        {
+            nonDominatedPopulation.append(individualI);
+        }
+        i++;
+    }
+    return nonDominatedPopulation;
+*/
+
+   // ---------------------- original
+/*
     while(i < p)
     {
         j = 0;
@@ -302,6 +398,7 @@ QList<Individual *> Simulation::getNonDominatedPopulationApproach1()
         i++;
     }
     return nonDominatedPopulation;
+*/
 }
 
 QList<Individual *> Simulation::getNonDominatedPopulationApproach2()
@@ -366,14 +463,14 @@ bool Simulation::individualDominate(Individual * xj, Individual * xi)
 
 
     // condition a
-    if ( (xj->getPerformanceDiscovery() <= xi->getPerformanceDiscovery()) &&
+    if ( (xj->getPerformanceDiscovery() >= xi->getPerformanceDiscovery()) &&
          (xj->getPerformanceLatency() <= xi->getPerformanceLatency()) )
     {
         conditionA = true;
     }
 
     // condition b
-    if ( (xj->getPerformanceDiscovery() < xi->getPerformanceDiscovery()) ||
+    if ( (xj->getPerformanceDiscovery() > xi->getPerformanceDiscovery()) ||
          (xj->getPerformanceLatency() < xi->getPerformanceLatency()) )
     {
         conditionB = true;
@@ -413,3 +510,12 @@ void Simulation::printPopulation()
         populationList.at(i)->printIndividual();
     }
 }
+
+
+int Simulation::getgNormative()
+{
+    return gNormative;
+}
+
+
+

@@ -70,6 +70,7 @@ void NormativePhenotypicPart::updateNormativePhenotypicPart(double lF1, double u
     upperF2 = uF2;
 }
 
+/*
 void NormativePhenotypicPart::updateNormativePhenotypicPart(ExternalFile extFile)
 {
     lowerF1 = extFile.getLowerF1();
@@ -79,7 +80,7 @@ void NormativePhenotypicPart::updateNormativePhenotypicPart(ExternalFile extFile
     upperF2 = extFile.getUpperF2();
 
 }
-
+*/
 
 
 

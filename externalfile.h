@@ -2,6 +2,8 @@
 #define EXTERNALFILE_H
 
 #include "individual.h"
+#include "normativegrid.h"
+
 
 
 /**
@@ -89,7 +91,7 @@ public:
      *
      * @param nonDominatedList Lista de individuos no dominados a agregar
      */
-    void addNonDominatedIndividuals(QList<Individual *> nonDominatedListToInsert);
+    void addNonDominatedIndividuals(QList<Individual *> nonDominatedListToInsert, NormativeGrid * nGrid);
 
     /**
      * @brief Retorna verdadero si el individuo pasado como argumento esta dominado por algun
@@ -134,6 +136,25 @@ public:
      * @param newIndividual Individuo para verificar si domina a alguien o lo dominan a el
      */
     bool newIndividualNotDominatedNotDominates(Individual * newIndividual);
+
+    /**
+     * @brief Chequea el contador de la rejilla de los individuos del archivo externo para reemplazar uno
+     * con el individuo pasado como argumento
+     *
+     * Se sigue la regla numero 4 de las reglas de insercion de individuos en el archivo externo
+     *
+     * @param newIndividual Individuo para verificar el reemplazo en el archivo externo
+     * @param nGrid Rejilla del espacio de creencias
+     */
+    void checkGridCellAndInsertIndividual(Individual * newIndividual, NormativeGrid *nGrid);
+
+    /**
+     * @brief Retorna verdadero si el individuo pasado como argumento ya existe en el archivo externo
+     *
+     * @param ind individuo para verificar si existe en el archivo externo
+     * @return Retorna verdadero si el individuo pasado como argumento ya existe en el archivo externo
+     */
+    bool isIndividualInExternalFile(Individual * ind);
 };
 
 #endif // EXTERNALFILE_H

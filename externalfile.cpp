@@ -52,8 +52,9 @@ void ExternalFile::addNonDominatedIndividuals(Individual * ind)
     externalFileNonDominatedList.append(ind);
 }
 
-void ExternalFile::addNonDominatedIndividuals(QList<Individual *> nonDominatedListToInsert)
+void ExternalFile::addNonDominatedIndividuals(QList<Individual *> nonDominatedListToInsert, NormativeGrid *nGrid)
 {
+    qDebug("ExternalFile::addNonDominatedIndividuals(QList<Individual *> nonDominatedListToInsert, NormativeGrid *nGrid)");
 
     Individual * newIndividual;
 
@@ -62,6 +63,13 @@ void ExternalFile::addNonDominatedIndividuals(QList<Individual *> nonDominatedLi
     for (int i = 0; i < nonDominatedListToInsert.count(); i++)
     {
         newIndividual = nonDominatedListToInsert.at(i);
+
+        // verificar si newIndividual ya existe en el archivo externo
+        if (isIndividualInExternalFile(newIndividual))
+        {
+            return;
+        }
+
 
         // 1) Si el individuo que se pretende agregar es dominado por algun individuo
         // del archivo externo, entonces el individuo no se debe agregar
@@ -85,19 +93,25 @@ void ExternalFile::addNonDominatedIndividuals(QList<Individual *> nonDominatedLi
             {
                 externalFileNonDominatedList.append(newIndividual);
             }
+            else
+            {
+                // 4) el tamano del archivo es mayor que q entonces se busca algun individuo
+                // del archivo externo cuya celda contenga mas individuos que la celda a la
+                // que pertenece el individuo que se pretende agregar, y se reemplaza el
+                // individuo anterior con el nuevo.
+                checkGridCellAndInsertIndividual(newIndividual, nGrid);
+
+            }
         }
-        // 4) si newIndividual no es dominado ni domina a nadie en el archivo externo y
-        // el tamano del archivo es menor que q entonces agregarlo ...
-        else
-        {
-            //TODO
-        }
-
-
-
     }
-
-
+    Individual * ind;
+    qDebug("INDIVIDUOS Del archivo externo-------");
+    for (int i = 0; i < nonDominatedListToInsert.count(); i++)
+    {
+        ind = nonDominatedListToInsert.at(i);
+        ind->printIndividual();
+    }
+    qDebug("-------");
 }
 
 
@@ -178,6 +192,7 @@ bool ExternalFile::newIndividualDominatesAnyoneInExternalFile(Individual * newIn
 
 void ExternalFile::addNewIndividualAndCheck(Individual * newIndividual)
 {
+    qDebug("->ExternalFile::addNewIndividualAndCheck");
     Individual * nonDominatedindividual;
 
     bool newIndividualAlreadyInserted = false;
@@ -194,11 +209,13 @@ void ExternalFile::addNewIndividualAndCheck(Individual * newIndividual)
             {
                 externalFileNonDominatedList.replace(i, newIndividual);
                 newIndividualAlreadyInserted = true;
+                qDebug("+ reemplazo individuo del archivo externo");
             }
             else // newIndividual ya insertado, entonces marcar nonDominatedIndividual
             {
                 //externalFileNonDominatedList.removeAt(i);
                 markedToRemove.append(i);
+                qDebug("marcado individuo duplicado con indice %d", i);
             }
         }
     }
@@ -251,9 +268,68 @@ bool ExternalFile::newIndividualNotDominatedNotDominates(Individual * newIndivid
 }
 
 
+void ExternalFile::checkGridCellAndInsertIndividual(Individual * newIndividual, NormativeGrid * nGrid)
+{
+    // 4) el tamano del archivo es mayor que q entonces se busca algun individuo
+    // del archivo externo cuya celda contenga mas individuos que la celda a la
+    // que pertenece el individuo que se pretende agregar, y se reemplaza el
+    // individuo anterior con el nuevo.
+
+    int newIndividualCellCount = nGrid->getCountOfCell(newIndividual);
+
+    Individual * externalFileindividual;
+
+    int externalFileindividualCellCount = 0;
 
 
+    for (int i = 0; i < externalFileNonDominatedList.count(); i++)
+    {
+        externalFileindividual = externalFileNonDominatedList.at(i);
+        externalFileindividualCellCount = nGrid->getCountOfCell(externalFileindividual);
 
+        if (externalFileindividualCellCount > newIndividualCellCount)
+        {
+            // reemplazar el individuo con newIndivual
+            externalFileNonDominatedList.replace(i, newIndividual);
+        }
+    }
+}
+
+
+bool ExternalFile::isIndividualInExternalFile(Individual * ind)
+{
+    qDebug("->ExternalFile::isIndividualInExternalFile");
+    Individual * alreadyInsertedIndividual;
+
+    for (int i = 0; i < externalFileNonDominatedList.count(); i++)
+    {
+        alreadyInsertedIndividual = externalFileNonDominatedList.at(i);
+
+        // verificar si valores de F1 y F2 son iguales
+        if ( (ind->getPerformanceDiscovery() == alreadyInsertedIndividual->getPerformanceDiscovery()) &&
+            (ind->getPerformanceLatency() == alreadyInsertedIndividual->getPerformanceLatency()) )
+        {
+            qDebug("    F1 y F2 son iguales");
+
+            bool parameterFlagDifferent = false;
+            for (int j=0; j<44; j++)
+            {
+                if (ind->getParameter(j) != alreadyInsertedIndividual->getParameter(j))
+                {
+                    qDebug("    parametro %d del individuo es igual", j);
+                    parameterFlagDifferent = true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+        else{
+            return false;
+        }
+    }
+}
 
 
 

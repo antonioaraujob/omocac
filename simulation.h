@@ -106,7 +106,7 @@ private:
      */
     Mutation * mutation;
 
-    /**
+    /**populationList
      * @brief Seleccion de la poblacion
      *
      *  Este objeto se encarga de realizar la seleccion de P individuos a partir de la
@@ -129,15 +129,17 @@ public:
     ~Simulation();
 
 
-
-    // Parametros
-
     // generar poblacion e inicializarla
-
     /**
      * Inicializar poblacion de la simulacion
      */
     void initializePopulation();
+
+    /**
+     * @brief Retorna la lista de la poblacion de invididuos
+     * @return
+     */
+    QList<Individual *> getPopulationList();
 
     // evaluar poblacion
 
@@ -155,12 +157,6 @@ public:
      */
     void initializeNormativePhenotypicPart();
 
-
-    /**
-     * @brief Actualiza la parte fenotipica normativa
-     */
-    void updateNormativePhenotypicPart();
-
     /**
      * Inicializar la rejilla del espacio de creencias.
      *
@@ -175,8 +171,16 @@ public:
      */
     void initializeGrid();
 
+    // actualizar el espacio de creencias
     /**
-     * @brief Actualiza la rejilla del espacio de creencias
+     * @brief Actualiza la parte fenotipica normativa
+     */
+    void updateNormativePhenotypicPart();
+
+    /**
+     * @brief Actualiza la rejilla del espacio de creencias con los individuos no dominados
+     * agregados al archivo externo
+     *
      * @param nonDominated lista de individuos no dominados
      */
     void updateGrid(QList<Individual *> nonDominated);
@@ -185,7 +189,6 @@ public:
      * @brief Imprime la rejilla del espacio de creencia actual
      */
     void printGrid();
-
 
     // generacion hijos
     /**
@@ -197,6 +200,7 @@ public:
     // evaluar hijos
 
     // hacer torneos
+    // seleccionar ganadores de torneos
     /**
      * @brief Realiza el proceso de seleccion de P individuos a partir de la poblacion 2P
      * generada con la @see mutatePopulation.
@@ -205,13 +209,25 @@ public:
      */
     void selectPopulation();
 
-
-    // seleccionar ganadores de torneos
-
     // agregar individuos no dominados al archivo externo
+    /**
+     * @brief Agrega los individuos no dominados en la lista pasada como argumento al archivo
+     * externo de acuerdo a las reglas de insercion
+     *
+     * @param ndIndividualList Lista de individuos no dominados
+     */
+    void addNonDominatedIndividualsToExternalFile(QList<Individual *> ndIndividualList);
 
-    // actualizar el espacio de creencias
+    /**
+     * @brief Incrementa el contador de generaciones de la clase Simulation
+     */
+    void incrementGeneration();
 
+    /**
+     * @brief Retorna el numero de la generacion actual
+     * @return Numero de la generacion actual
+     */
+    int getCurrentGenerationNumber();
 
     /**
      * Retorna verdadero si alcanzo la generacion establecida por el parametro generationMax
@@ -264,6 +280,14 @@ public:
      * @brief Imprime la poblacion actual
      */
     void printPopulation();
+
+    /**
+     * @brief Retorna el valor del numero de generaciones que deben pasar para actualizar
+     * la parte fenotipica normativa
+     * @return Retorna el valor del numero de generaciones que deben pasar para actualizar
+     * la parte fenotipica normativa
+     */
+    int getgNormative();
 
 };
 

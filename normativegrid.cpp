@@ -155,6 +155,8 @@ int NormativeGrid::getF1SubintervalIndex(double value)
             }
         }
     }
+    if (index == -1)
+        qDebug("XXXXXXX getF1SubintervalIndex(double %f): %d", value, index);
     return index;
 }
 
@@ -178,6 +180,8 @@ int NormativeGrid::getF2SubintervalIndex(double value)
             }
         }
     }
+    if (index == -1)
+        qDebug("XXXXXXX getF2SubintervalIndex(double %f): %d", value, index);
     return index;
 }
 

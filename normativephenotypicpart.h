@@ -1,7 +1,7 @@
 #ifndef NORMATIVEPHENOTYPICPART_H
 #define NORMATIVEPHENOTYPICPART_H
 
-#include "externalfile.h"
+//#include "externalfile.h"
 
 
 /**
@@ -130,7 +130,7 @@ public:
      *
      * @param extFile ExternalFile para obtener los limites de las funciones objetivo
      */
-    void updateNormativePhenotypicPart(ExternalFile extFile);
+    //void updateNormativePhenotypicPart(ExternalFile extFile);
 
 
 

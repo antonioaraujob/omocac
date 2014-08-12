@@ -43,7 +43,7 @@ QList<Individual *> Selection::getSelectedPopulation()
 
 void Selection::doSelection(QList<Individual *> population2p, int matches, NormativeGrid *nGrid)
 {
-    //selectedPopulation.clear();
+    selectedPopulation.clear();
 
     // lista de adversarios de tamano matches
     QList<Individual *> adversaryList;
@@ -159,6 +159,8 @@ void Selection::makeTournaments(int individualIndex, Individual * individual, QL
             if ( (individual->getPerformanceDiscovery() == adversary->getPerformanceDiscovery()) &&
                 ((individual->getPerformanceLatency() == adversary->getPerformanceLatency())) )
             {
+                qDebug("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+
                 // a) si ambos estan dentro de la rejilla del espacio de creencias, gana el que se encuentre en una
                 // celda menos poblada (segun el contador de las celdas)
                 if ( (nGrid->individualInsideGrid(individual)) && (nGrid->individualInsideGrid(adversary)) )
