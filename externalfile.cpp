@@ -106,9 +106,9 @@ void ExternalFile::addNonDominatedIndividuals(QList<Individual *> nonDominatedLi
     }
     Individual * ind;
     qDebug("INDIVIDUOS Del archivo externo-------");
-    for (int i = 0; i < nonDominatedListToInsert.count(); i++)
+    for (int i = 0; i < externalFileNonDominatedList.count(); i++)
     {
-        ind = nonDominatedListToInsert.at(i);
+        ind = externalFileNonDominatedList.at(i);
         ind->printIndividual();
     }
     qDebug("-------");

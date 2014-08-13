@@ -3,6 +3,9 @@
 
 #include <QMainWindow>
 
+#include "simulation.h"
+
+
 namespace Ui {
 class MainWindow;
 }
@@ -14,6 +17,9 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
     
+private:
+    Simulation * simulation;
+
 public:
 
     /**
@@ -25,7 +31,15 @@ public:
      * Destructor de la clase
      */
     ~MainWindow();
+
+
+    void populateListView();
+
     
+public slots:
+    void executeAlgorithm();
+
+
 private:
     Ui::MainWindow *ui;
 };
