@@ -296,6 +296,8 @@ void MainWindow::executeAlgorithm()
         // realizar torneos y seleccionar poblacion
         simulation->selectPopulation();
         qDebug("...despues de simulation->selectPopulation()");
+
+        // imprimir poblacion para depuracion
         simulation->printPopulation();
 
         // obtener los individuos no dominados

@@ -6,7 +6,7 @@
 #include <QSet>
 
 /**
- * Clase que modela un individuo del espacio de poblacion.
+ * @brief Clase que modela un individuo del espacio de poblacion.
  *
  * Un individuo tiene la siguiente estructura:
  *
@@ -56,24 +56,24 @@ private:
 
 public:
     /**
-     * Constructor de la clase
+     * @brief Constructor de la clase
      *
      * @param numberOfApsDeployed Numero de APs desplegados
      */
     Individual(int numberOfApsDeployed);
 
     /**
-     * Destructor de la clase
+     * @brief Destructor de la clase
      */
     ~Individual();
 
     /**
-     * Constructor copia
+     * @brief Constructor copia
      */
     Individual(Individual &p);
 
     /**
-     * Retorna un numero de canal aleatorio.
+     * @brief Retorna un numero de canal aleatorio.
      *
      * Esta funcion se utiliza para inicializar los individuos de manera que los canales
      * aleatorios seleccionados no se repitan en la secuencia de scanning.
@@ -83,19 +83,19 @@ public:
     int getRandomChannel();
 
     /**
-     * Retorna un numero de minChannelTime aleatorio
+     * @brief Retorna un numero de minChannelTime aleatorio
      * @return valor de minChannelTime aleatorio
      */
     double getRandomMinChannelTime();
 
     /**
-     *  Retorna un numero de maxChannelTime aleatorio
+     *  @brief Retorna un numero de maxChannelTime aleatorio
      * @return canal aleatorio
      */
     double getRandomMaxChannelTime();
 
     /**
-     * Retorna un numero de APs descubiertos en el canal i
+     * @brief Retorna un numero de APs descubiertos en el canal i
      * dado un numero de AP desplegados.
      *
      * El valor se obtiene de la proporcion promedio de APs que operan en
@@ -107,72 +107,72 @@ public:
     double getAPNumberOnChannel(int numberOfApsDeployed, int channel);
 
     /**
-     *  Imprime el individuo en una cadena legible al humano
+     *  @brief Imprime el individuo en una cadena legible al humano
      */
     void printIndividual();
 
     /**
-     * Retorna el individuo como una cadena
+     * @brief Retorna el individuo como una cadena
      * @return Cadena legible al humano de los parametros del individuo
      */
     QString getIndividualAsQString();
 
     /**
-     *  Establece el valor de desempeno del individuo
+     *  @brief Establece el valor de desempeno del individuo
      * @param performance valor de desempeno
      */
     void setPerformanceValue(double performance);
 
     /**
-     *  Calcula el valor de desempeno del individuo
+     *  @brief Calcula el valor de desempeno del individuo
      */
     void calculatePerformanceValue();
 
     /**
-     * Retorna el valor de desempeno del individuo
+     * @brief Retorna el valor de desempeno del individuo
      * @return valor de desempeno del individuo
      */
     double getPerformanceValue();
 
     /**
-     *  Establece el valor de desempeno de la funcion objetivo 1 tasa de descubrimiento
+     *  @brief Establece el valor de desempeno de la funcion objetivo 1 tasa de descubrimiento
      * @param performance valor de desempeno
      */
     void setPerformanceDiscovery(double performance);
 
     /**
-     * Retorna el valor de desempeno del individuo para la funcion objetivo 1 tasa de descubrimiento
+     * @brief Retorna el valor de desempeno del individuo para la funcion objetivo 1 tasa de descubrimiento
      * @return valor de desempeno de la tasa de descubrimiento del individuo
      */
     double getPerformanceDiscovery();
 
     /**
-     *  Establece el valor de desempeno de la funcion objetivo 2 latencia
+     *  @brief Establece el valor de desempeno de la funcion objetivo 2 latencia
      * @param performance valor de desempeno de latencia
      */
     void setPerformanceLatency(double performance);
 
     /**
-     * Retorna el valor de desempeno del individuo para la funcion objetivo 2 latencia
+     * @brief Retorna el valor de desempeno del individuo para la funcion objetivo 2 latencia
      * @return valor de desempeno de la latencia
      */
     double getPerformanceLatency();
 
     /**
-     * Asigna el valor del parametro en la posicion i
+     * @brief Asigna el valor del parametro en la posicion i
      * @param i indice del parametro a asignar
      * @param value valor a asignar en el parametro
      */
     void setParameter(int i, double value);
 
     /**
-     * Retorna el valor del parametro en la posicion i
+     * @brief Retorna el valor del parametro en la posicion i
      * @param i indice del parametro a retornar
      */
     double getParameter(int i);
 
     /**
-     * Retorna el numero de parametros del individuo
+     * @brief Retorna el numero de parametros del individuo
      * @return Numero de parametros del individuo
      */
     int getNumberOfParameters();

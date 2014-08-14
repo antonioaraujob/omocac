@@ -66,6 +66,7 @@ public:
 
     /**
      * @brief Ejecuta los torneos entre el individuo y los adversarios de la lista de adversarios
+     * segun las reglas del algoritmo
      *
      * @param individualIndex indice del individuo en la poblacion 2p
      * @param individual Individuo que se enfrentara en torneos a los adversarios
@@ -90,8 +91,16 @@ public:
      */
     int getRandom(int high);
 
-
-
+    /**
+     * @brief Retorna verdadero si los individuos pasados como argumento son no comparables.
+     *
+     * Los individuos son no comparables si el individuo a no domina al b ni b domina al a.
+     *
+     * @param a
+     * @param b
+     * @return Verdaderon si los individuos pasados como argumento son no comparables.
+     */
+    bool nonComparableIndividuals(Individual * a, Individual * b);
 
 };
 

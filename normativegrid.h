@@ -15,27 +15,27 @@ class NormativeGrid
 private:
 
     /**
-     * Limite inferior de la funcion objetivo 1
+     * @brief Limite inferior de la funcion objetivo 1
      */
     double lowerF1;
 
     /**
-     * Limite superior de la funcion objetivo 2
+     * @brief Limite superior de la funcion objetivo 2
      */
     double upperF1;
 
     /**
-     * Limite inferior de la funcion objetivo 2
+     * @brief Limite inferior de la funcion objetivo 2
      */
     double lowerF2;
 
     /**
-     * Limite superior de la funcion objetivo2
+     * @brief Limite superior de la funcion objetivo2
      */
     double upperF2;
 
     /**
-     * Numero de intervalos para construir la rejilla
+     * @brief Numero de intervalos para construir la rejilla
      */
     int subIntervalNumber;
 
@@ -50,7 +50,7 @@ private:
     QList<GridSubInterval *> subIntervalListF2;
 
     /**
-     * Rejilla del espacio de creencias
+     * @brief Rejilla del espacio de creencias
      *
      * En el eje X estaran los valores de la funcion objetivo 1 descubierta
      * En el eje Y estaran los valores de la funcion objetivo 2 latencia
@@ -60,7 +60,7 @@ private:
 public:
 
     /**
-     * Constructor de la clase NormativeGrid
+     * @brief Constructor de la clase NormativeGrid
      *
      * @param intervals corresponde al numero de intervalos en que se divide la rejilla (intervals x intervals)
      * @param nPhenotypicPart corresponde a la parte normativa fenotipica
@@ -68,18 +68,18 @@ public:
     NormativeGrid(int subIntervals, NormativePhenotypicPart * nPhenotypicPart);
 
     /**
-     * Destructor de la clase NormativeGrid
+     * @brief Destructor de la clase NormativeGrid
      */
     ~NormativeGrid();
 
     /**
-     * Retorna el numero de intervalos para dividir la rejilla
+     * @brief Retorna el numero de intervalos para dividir la rejilla
      * @return intervalos para dividir la rejilla
      */
     int getSubIntervalNumber();
 
     /**
-     * Agrega un individuo a la grid.
+     * @brief Agrega un individuo a la grid.
      *
      * Se incrementa el contador en la celda de la grid correspondiente al individuo.
      *
@@ -88,7 +88,7 @@ public:
     void addIndividualToGrid(Individual * ind);
 
     /**
-     * Retorna el contador de individuos en una celda (x,y)
+     * @brief Retorna el contador de individuos en una celda (x,y)
      *
      * @param f1 valor de la funcion objetivo 1
      * @param f2 valor de la funcion objetivo 2

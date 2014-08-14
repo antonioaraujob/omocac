@@ -11,24 +11,28 @@ class MainWindow;
 }
 
 /**
- * Clase que modela la ventana principal del programa
+ * @brief Clase que modela la ventana principal del programa
  */
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
     
 private:
+
+    /**
+     * @brief Objeto Simulation que abstrae todo el algoritmo cultural
+     */
     Simulation * simulation;
 
 public:
 
     /**
-     * Constructor de la clase
+     * @brief Constructor de la clase
      */
     explicit MainWindow(QWidget *parent = 0);
 
     /**
-     * Destructor de la clase
+     * @brief Destructor de la clase
      */
     ~MainWindow();
 
@@ -37,11 +41,30 @@ public:
 
     
 public slots:
+
+    /**
+     * @brief Slot para ejecutar el algoritmo cultural al presionar un boton en
+     * la interfaz grafica
+     */
     void executeAlgorithm();
 
 
 private:
     Ui::MainWindow *ui;
 };
+
+
+/** \mainpage Optimización Multiobjetivo con un algoritmo Cultural
+  *
+  * \section intro_sec Introducción
+  *
+  * En este proyecto se utiliza un algoritmo cultural para abordar un problema de optimización
+  * multiobjetivo.
+  *
+  *
+  *
+  *
+  */
+
 
 #endif // MAINWINDOW_H

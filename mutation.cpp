@@ -31,7 +31,6 @@ void Mutation::doMutation(QList<Individual *> population, double std, int deploy
         father = population.at(i);
 
         // crear un individuo (offspring) y mutar todos sus parametros
-        // TODO
         for (int i=0; i<father->getNumberOfParameters(); i++)
         {
             offspring = new Individual(deployedAp);

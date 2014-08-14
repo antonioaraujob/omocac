@@ -155,9 +155,11 @@ void Selection::makeTournaments(int individualIndex, Individual * individual, QL
         }
         else //
         {
-            // 2) si no son comparables, o sus valores de funciones objetivo son iguales
-            if ( (individual->getPerformanceDiscovery() == adversary->getPerformanceDiscovery()) &&
-                ((individual->getPerformanceLatency() == adversary->getPerformanceLatency())) )
+            // 2) si no son comparables (esto quiere decir que a no domina a b, ni que b domina a a)
+            // o sus valores de funciones objetivo son iguales
+            if ( (nonComparableIndividuals(individual, adversary)) ||
+                ( (individual->getPerformanceDiscovery() == adversary->getPerformanceDiscovery()) &&
+                ((individual->getPerformanceLatency() == adversary->getPerformanceLatency())) ) )
             {
                 qDebug("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
 
@@ -165,6 +167,7 @@ void Selection::makeTournaments(int individualIndex, Individual * individual, QL
                 // celda menos poblada (segun el contador de las celdas)
                 if ( (nGrid->individualInsideGrid(individual)) && (nGrid->individualInsideGrid(adversary)) )
                 {
+                    qDebug("   ambos individuos estan dentro de la rejilla");
                     int counterIndividual = 0;
                     int counterAdversary = 0;
 
@@ -244,3 +247,24 @@ int Selection::getRandom(int high)
     //int high = 11;
     return qrand() % ((high + 1) - low) + low;
 }
+
+
+bool Selection::nonComparableIndividuals(Individual *a, Individual * b)
+{
+    qDebug("Selection::nonComparableIndividuals");
+    if ( (!individualDominate(a,b)) && (!individualDominate(b,a)) )
+    {
+        qDebug("   ***** par de individuos no comparables ******");
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+
+}
+
+
+
+
+

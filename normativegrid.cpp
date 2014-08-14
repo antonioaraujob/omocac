@@ -27,11 +27,13 @@ NormativeGrid::NormativeGrid(int subIntervals, NormativePhenotypicPart * nPhenot
 
 
     QString row;
+
     qDebug("Elementos de la Matriz : ");
     for (int i = 0; i < subIntervalNumber; i++)
     {
         for (int j = 0; j < subIntervalNumber; j++)
         {
+            // inicializar el contador en 0
             ptrGrid[i][j] = 0;
             row.append(QString::number(ptrGrid[i][j]));
             row.append("-");

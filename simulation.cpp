@@ -124,53 +124,6 @@ void Simulation::initializeNormativePhenotypicPart()
 void Simulation::initializeGrid()
 {
     nGrid = new NormativeGrid(gridSubintervalsNumber, normativePhenotipicPart);
-
-/*
-    double widthF1 = (normativePhenotipicPart->getUpperF1() - normativePhenotipicPart->getLowerF1()) / gridSubintervalsNumber;
-    qDebug("---ancho del intervaloF1: %f", widthF1);
-
-    QList<GridSubInterval> intervalListF1;
-
-    double l = normativePhenotipicPart->getLowerF1();
-    double u = 0;
-
-    qDebug("   %f",normativePhenotipicPart->getLowerF1());
-    for (int i = 1; i <= 10; i++)
-    {
-        u = normativePhenotipicPart->getLowerF1()+widthF1*i;
-        qDebug("%f - %f", l, u);
-        GridSubInterval subInterval(l,u);
-        intervalListF1.append(subInterval);
-
-        qDebug("   %f",normativePhenotipicPart->getLowerF1()+widthF1*i);
-        l = normativePhenotipicPart->getLowerF1()+widthF1*i;
-
-
-    }
-
-    QList<GridSubInterval> intervalListF2;
-
-
-    double widthF2 = (normativePhenotipicPart->getUpperF2() - normativePhenotipicPart->getLowerF2()) / gridSubintervalsNumber;
-    qDebug("---ancho del intervaloF2: %f", widthF2);
-
-    l = normativePhenotipicPart->getLowerF2();
-    u = 0;
-
-    qDebug("   %f",normativePhenotipicPart->getLowerF2());
-    for (int j = 1; j <= 10; j++)
-    {
-        u = normativePhenotipicPart->getLowerF2()+widthF2*j;
-        qDebug("%f - %f", l, u);
-        GridSubInterval subInterval(l,u);
-        intervalListF2.append(subInterval);
-
-        qDebug("   %f",normativePhenotipicPart->getLowerF2()+widthF2*j);
-        l = normativePhenotipicPart->getLowerF2()+widthF2*j;
-    }
-*/
-
-
 }
 
 
@@ -301,6 +254,7 @@ bool Simulation::stopEvolution()
 QList<Individual *> Simulation::getNonDominatedPopulationApproach1()
 {
     qDebug("...Simulation::getNonDominatedPopulationApproach1");
+
     // populationList es la lista de individuos
     QList<Individual *> nonDominatedPopulation;
     int p = populationList.count();
@@ -334,71 +288,6 @@ QList<Individual *> Simulation::getNonDominatedPopulationApproach1()
     return nonDominatedPopulation;
 
 
- // ---------------------- original
-/*
-    int i = 0;
-    int j;
-
-    while(i < p)
-    {
-        j = 0;
-
-        individualI = populationList.at(i);
-
-        while (j < p)
-        {
-            if (j != i)
-            {
-                //if ( individualDominate(Individual * xj, Individual * xi) )
-                individualJ = populationList.at(j);
-                if ( individualDominate(individualJ, individualI) )
-                {
-                    i++;
-                    //if (i==p)
-                    //    break;
-                }
-            }
-            j++;
-        }
-        if (j == p)
-        {
-            nonDominatedPopulation.append(individualI);
-        }
-        i++;
-    }
-    return nonDominatedPopulation;
-*/
-
-   // ---------------------- original
-/*
-    while(i < p)
-    {
-        j = 0;
-
-        individualI = populationList.at(i);
-
-        while (j < p)
-        {
-            if (j != i)
-            {
-                //if ( individualDominate(Individual * xj, Individual * xi) )
-                individualJ = populationList.at(j);
-                if ( individualDominate(individualJ, individualI) )
-                {
-                    i++;
-                    //continue;
-                }
-            }
-            j++;
-        }
-        if (j == p)
-        {
-            nonDominatedPopulation.append(individualI);
-        }
-        i++;
-    }
-    return nonDominatedPopulation;
-*/
 }
 
 QList<Individual *> Simulation::getNonDominatedPopulationApproach2()

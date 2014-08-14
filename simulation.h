@@ -13,7 +13,7 @@
 
 
 /**
- * Clase que modela la simulacion para el algoritmo cultural
+ * @brief Clase que modela la simulacion para el algoritmo cultural
  */
 class Simulation
 {
@@ -21,39 +21,39 @@ class Simulation
 private:
 
     /**
-     * Tamano de la poblacion
+     * @brief Tamano de la poblacion
      */
     int populationSize;
 
     /**
-     * Tamano maximo del archivo externo de soluciones
+     * @brief Tamano maximo del archivo externo de soluciones
      */
     int externalFileSize;
 
     /**
-     * Numero maximo de generaciones
+     * @brief Numero maximo de generaciones
      */
     int generationsMax;
 
     /**
-     * Numero de la generacion actual
+     * @brief Numero de la generacion actual
      */
     int currentGeneration;
 
     /**
-     * Numero de subintervalos para la grid
+     * @brief Numero de subintervalos para la grid
      */
     int gridSubintervalsNumber;
 
     /**
-     * Frecuencia con la que se actualiza la parte fenotipica normativa.
+     * @brief Frecuencia con la que se actualiza la parte fenotipica normativa.
      * Cada gNormative generaciones se debe actualizar la parte fenotipica
      * normativa.
      */
     int gNormative;
 
     /**
-     * Numero de encuentros por individuo para torneos.
+     * @brief Numero de encuentros por individuo para torneos.
      * Entre más cercano sea este numero a 2p, mas parecido sera a
      * una jerarquizacion completa, requiriendo, en consecuencia, mas
      * tiempo de máquina. p/2 es un buen valor.
@@ -61,27 +61,27 @@ private:
     int matchesPerIndividuals;
 
     /**
-     * Desviacion estandar para el proceso de mutacion gausiana
+     * @brief Desviacion estandar para el proceso de mutacion gausiana
      */
     int stdDeviation;
 
     /**
-     * Numero de APs desplegados en la simulacion
+     * @brief Numero de APs desplegados en la simulacion
      */
     int deployedAPs;
 
     /**
-     * Lista de la poblacion de individuos
+     * @brief Lista de la poblacion de individuos
      */
     QList<Individual *> populationList;
 
     /**
-     * Lista de la poblacion de individuos mutados
+     * @brief Lista de la poblacion de individuos mutados
      */
     QList<Individual *> mutatedPopulationList;
 
     /**
-     * Parte Normativa Fenotipica del espacio de creencias
+     * @brief Parte Normativa Fenotipica del espacio de creencias
      */
     NormativePhenotypicPart * normativePhenotipicPart;
 
@@ -106,7 +106,7 @@ private:
      */
     Mutation * mutation;
 
-    /**populationList
+    /**
      * @brief Seleccion de la poblacion
      *
      *  Este objeto se encarga de realizar la seleccion de P individuos a partir de la
@@ -117,21 +117,31 @@ private:
 public:
 
     /**
-     * Constructor de la clase Simulacion
+     * @brief Constructor de la clase Simulacion
+     *
+     * @param population tamano de la poblacion
+     * @param extFileSize tamano del archivo externo
+     * @param generations numero de generaciones
+     * @param subintervalsGrid numero de subintervalos para la rejilla
+     * @param genNormative numero de generacion para ejecutar la actualizacion de la parte
+     * normativa fenotipica
+     * @param matches numero de torneos por individuo
+     * @param stdDev desviacion estandar de la distribucion normal para la mutacion gausiana
+     * @param aps numero de APs desplegados en el entorno
      *
      */
     Simulation(int population, int extFileSize, int generations, int subintervalsGrid, int genNormative,
                int matches, int stdDev, int aps);
 
     /**
-     * Destructor de la clase
+     * @brief Destructor de la clase
      */
     ~Simulation();
 
 
     // generar poblacion e inicializarla
     /**
-     * Inicializar poblacion de la simulacion
+     * @brief Inicializa la poblacion de la simulacion
      */
     void initializePopulation();
 
@@ -145,7 +155,7 @@ public:
 
     // inicializar el espacio de creencias
     /**
-     * Inicializar parte fenotipica normativa.
+     * @brief Inicializa la parte normativa fenotipica.
      *
      * La inicialización de la parte normativa fenotípica del espacio de creencias
      * consiste en encontrar los valores extremos de cada función objetivo que se
@@ -158,7 +168,7 @@ public:
     void initializeNormativePhenotypicPart();
 
     /**
-     * Inicializar la rejilla del espacio de creencias.
+     * @brief Inicializa la rejilla del espacio de creencias.
      *
      * La rejilla se crea tomando como intervalos los valores almacenados en la parte
      * normativa fenotípica y se divide utilizando los parámetros de entrada s1 y s2.
@@ -230,25 +240,25 @@ public:
     int getCurrentGenerationNumber();
 
     /**
-     * Retorna verdadero si alcanzo la generacion establecida por el parametro generationMax
+     * @brief Retorna verdadero si alcanzo la generacion establecida por el parametro generationMax
      */
     bool stopEvolution();
 
     /**
-     * Retorna la lista de individuos no dominados de la poblacion de acuerdo al enfoque 1
+     * @brief Retorna la lista de individuos no dominados de la poblacion de acuerdo al enfoque 1
      * @return Lista de individuos no dominados
      */
     QList<Individual *> getNonDominatedPopulationApproach1();
 
 
     /**
-     * Retorna la lista de individuos no dominados de la poblacion de acuerdo al enfoque 2
+     * @brief Retorna la lista de individuos no dominados de la poblacion de acuerdo al enfoque 2
      * @return Lista de individuos no dominados
      */
     QList<Individual *> getNonDominatedPopulationApproach2();
 
     /**
-     * Retorna si el individuo xj domina al individuo xi
+     * @brief Retorna si el individuo xj domina al individuo xi
      * @param xj Individuo 1
      * @param xi Individuo 2
      * @return Verdadero si individuo xj domina a xi
