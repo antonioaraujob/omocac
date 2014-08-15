@@ -7,7 +7,7 @@
 
 
 /**
- * Clase que modela el archivo externo de la optimizacion multiobjetivo
+ * @brief Clase que modela el archivo externo de la optimizacion multiobjetivo
  * con algoritmo cultural
  */
 class ExternalFile
@@ -28,18 +28,18 @@ private:
 public:
 
     /**
-    * Constructor de la clase
+    * @brief Constructor de la clase
     */
     ExternalFile(int externalFileSize);
 
     /**
-     * Destructor de la clase
+     * @brief Destructor de la clase
      */
     ~ExternalFile();
 
 
     /**
-    * Devuelve el limite inferior de la funcion objetivo 1 para los individuos
+    * @brief Devuelve el limite inferior de la funcion objetivo 1 para los individuos
     * del archivo.
     *
     * @return Limite inferior de la funcion objetivo 1
@@ -47,7 +47,7 @@ public:
     double getLowerF1();
 
     /**
-    * Devuelve el limite superior de la funcion objetivo 1 para los individuos
+    * @brief Devuelve el limite superior de la funcion objetivo 1 para los individuos
     * del archivo.
     *
     * @return Limite superior de la funcion objetivo 1
@@ -55,7 +55,7 @@ public:
     double getUpperF1();
 
     /**
-    * Devuelve el limite inferior de la funcion objetivo 2 para los individuos
+    * @brief Devuelve el limite inferior de la funcion objetivo 2 para los individuos
     * del archivo.
     *
     * @return Limite inferior de la funcion objetivo 2
@@ -63,7 +63,7 @@ public:
     double getLowerF2();
 
     /**
-    * Devuelve el limite superior de la funcion objetivo 2 para los individuos
+    * @brief Devuelve el limite superior de la funcion objetivo 2 para los individuos
     * del archivo.
     *
     * @return Limite superior de la funcion objetivo 2
@@ -104,7 +104,7 @@ public:
     bool isNewIndividualDominatedByExternalFile(Individual * newIndividual);
 
     /**
-     * Retorna si el individuo xj domina al individuo xi
+     * @brief Retorna si el individuo xj domina al individuo xi
      * @param xj Individuo 1
      * @param xi Individuo 2
      * @return Verdadero si individuo xj domina a xi

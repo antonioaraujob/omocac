@@ -6,14 +6,14 @@
 #include "individual.h"
 
 /**
- * Clase que modela la variacion de la poblacion para cada generacion
+ * @brief Clase que modela la variacion de la poblacion para cada generacion
  */
 class Mutation
 {
 
 private:
     /**
-     * Lista que mantiene la poblacion original mas los hijos generados
+     * @brief Lista que mantiene la poblacion original mas los hijos generados
      */
     QList<Individual *> newPopulation;
 

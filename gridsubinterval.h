@@ -2,7 +2,7 @@
 #define GRIDSUBINTERVAL_H
 
 /**
- * Clase GridSubInterval que modela un subintervalo de la rejilla del
+ * @brief Clase GridSubInterval que modela un subintervalo de la rejilla del
  * espacio de creencias
  */
 class GridSubInterval
@@ -10,25 +10,25 @@ class GridSubInterval
 
 private:
     /**
-     * Limite inferior del subintervalo
+     * @brief Limite inferior del subintervalo
      */
     double lowerBound;
 
     /**
-     * Limite superior del subintervalo
+     * @brief Limite superior del subintervalo
      */
     double upperBound;
 
 public:
 
     /**
-     * Constructor de la clase GridSubInterval
+     * @brief Constructor de la clase GridSubInterval
      */
     GridSubInterval(int l, int u);
 
     /**
-    * Destructor de la clase GridSubInterval
-    */
+     * @brief Destructor de la clase GridSubInterval
+     */
     ~GridSubInterval();
 
     /**

@@ -191,6 +191,11 @@ void Simulation::updateNormativePhenotypicPart()
 
 void Simulation::updateGrid(QList<Individual *> nonDominated)
 {
+
+    // Para actualizar la rejilla simplemente se incrementan los contadores de los
+    // individuos no dominados con todos los individuos recién agregados al
+    // archivo externo durante la generación actual.
+
 /*
     Individual * ind = nonDominated.at(0);
     nGrid->addIndividualToGrid(ind);

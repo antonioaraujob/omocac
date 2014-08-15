@@ -37,6 +37,10 @@ public:
     ~MainWindow();
 
 
+    /**
+     * @brief Completa el widget ListView con los individuos no dominados del
+     * archivo externo al final de la ejecución del algoritmo cultural
+     */
     void populateListView();
 
     

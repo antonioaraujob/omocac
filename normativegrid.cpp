@@ -1,6 +1,8 @@
 #include "normativegrid.h"
 #include "gridsubinterval.h"
 
+#include <qmessagebox.h>
+
 #include<iostream>
 using namespace std;
 
@@ -76,6 +78,22 @@ void NormativeGrid::addIndividualToGrid(Individual * ind)
     // encontrar el subintervalo de F1 y de F2
     int indexF1 = getF1SubintervalIndex(f1);
     int indexF2 = getF2SubintervalIndex(f2);
+
+    if (indexF1 == -1)
+    {
+        QMessageBox msg;
+        msg.setText("NormativeGrid::addIndividualToGrid: indexF1 == -1. individuo fuera de la grid");
+        msg.exec();
+
+    }
+    if (indexF2 == -1)
+    {
+        QMessageBox msg;
+        msg.setText("NormativeGrid::addIndividualToGrid: indexF2 == -1. individuo fuera de la grid");
+        msg.exec();
+
+    }
+
 
     // incrementar el contador de la celda en los subintervalos
     int count = ptrGrid[indexF1][indexF2];

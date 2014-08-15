@@ -8,7 +8,9 @@
 #include "gridsubinterval.h"
 
 
-// Clase que modela la rejilla (grid) del espacio de creencias
+/**
+ * @brief Clase que modela la rejilla (grid) del espacio de creencias
+ */
 class NormativeGrid
 {
 

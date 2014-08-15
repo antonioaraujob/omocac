@@ -18,22 +18,22 @@ private:
 
 
     /**
-     * Limite inferior de la funcion objetivo 1
+     * @brief Limite inferior de la funcion objetivo 1
      */
     double lowerF1;
 
     /**
-     * Limite superior de la funcion objetivo 2
+     * @brief Limite superior de la funcion objetivo 2
      */
     double upperF1;
 
     /**
-     * Limite inferior de la funcion objetivo 2
+     * @brief Limite inferior de la funcion objetivo 2
      */
     double lowerF2;
 
     /**
-     * Limite superior de la funcion objetivo2
+     * @brief Limite superior de la funcion objetivo2
      */
     double upperF2;
 
