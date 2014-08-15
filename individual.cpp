@@ -1,10 +1,15 @@
 #include "individual.h"
 
+#include "simulation.h"
+
 #include <QTime>
 
 Individual::Individual(int numberOfApsDeployed)
 {
     //qsrand((uint)QTime::currentTime().msec());
+
+    // asignar el valor unico del identificador del individuo
+    individualId = Simulation::getNewindividualId();
 
     // se deben crear los 33 parametros
     // C1,Min1,Max1,AP1,C2,Min2,Max2,AP2,...,C11,Min11,Max11,AP11
@@ -19,6 +24,8 @@ Individual::Individual(int numberOfApsDeployed)
         parametersList.append(getRandomMaxChannelTime());
 
         parametersList.append(getAPNumberOnChannel(numberOfApsDeployed, randomChannel));
+
+        wonMatchesCounter = 0;
     }
 
     // calcular el valor de desempeno para el individuo
@@ -49,6 +56,12 @@ Individual::Individual(Individual &p)
     // calcular el valor de desempeno para la latencia
     setPerformanceLatency(getRandomMaxChannelTime());
 }
+
+int Individual::getIndividualId()
+{
+    return individualId;
+}
+
 
 int Individual::getRandomChannel()
 {
@@ -244,4 +257,19 @@ double Individual::getParameter(int i)
 int Individual::getNumberOfParameters()
 {
     return parametersList.count();
+}
+
+void Individual::setWonMatchesCounter(int value)
+{
+    wonMatchesCounter = value;
+}
+
+int Individual::getWonMatchesCounter()
+{
+    return wonMatchesCounter;
+}
+
+void Individual::incrementWonMatchesCounter()
+{
+    wonMatchesCounter++;
 }

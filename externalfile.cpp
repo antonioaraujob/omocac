@@ -58,16 +58,19 @@ void ExternalFile::addNonDominatedIndividuals(QList<Individual *> nonDominatedLi
 
     Individual * newIndividual;
 
+    int indexToReplaceIndividual = 0;
+
     // verificar las condiciones para agregar
 
     for (int i = 0; i < nonDominatedListToInsert.count(); i++)
     {
         newIndividual = nonDominatedListToInsert.at(i);
+        newIndividual->printIndividual();
 
         // verificar si newIndividual ya existe en el archivo externo
         if (isIndividualInExternalFile(newIndividual))
         {
-            return;
+            continue;
         }
 
 
@@ -75,15 +78,16 @@ void ExternalFile::addNonDominatedIndividuals(QList<Individual *> nonDominatedLi
         // del archivo externo, entonces el individuo no se debe agregar
         if ( !isNewIndividualDominatedByExternalFile(newIndividual) )
         {
+            qDebug(" individuo no esta dominado por el archivo externo; se inserta");
             externalFileNonDominatedList.append(newIndividual);
         }
         // 2) Si newIndividual domina a algun individuo en el archivo externo, entonces
         // se introduce en su lugar, pero continua comparandose contra todos los demas.
         // Si el mismo individuo, ya agregado, dominara a algun otro, este (el dominado)
         // es eliminado del archivo externo
-        else if (newIndividualDominatesAnyoneInExternalFile(newIndividual))
+        else if (newIndividualDominatesAnyoneInExternalFile(newIndividual, indexToReplaceIndividual))
         {
-            addNewIndividualAndCheck(newIndividual);
+            addNewIndividualAndCheck(newIndividual, indexToReplaceIndividual);
         }
         // 3) si newIndividual no es dominado ni domina a nadie en el archivo externo y
         // el tamano del archivo es menor que q entonces agregarlo
@@ -117,19 +121,23 @@ void ExternalFile::addNonDominatedIndividuals(QList<Individual *> nonDominatedLi
 
 bool ExternalFile::isNewIndividualDominatedByExternalFile(Individual * newIndividual)
 {
+    qDebug("ExternalFile::isNewIndividualDominatedByExternalFile");
     bool isDominated = false;
 
     Individual * nonDominatedindividual;
 
     for (int i = 0; i < externalFileNonDominatedList.count(); i++)
     {
+        qDebug("   dentro del for");
         nonDominatedindividual = externalFileNonDominatedList.at(i);
         if (individualDominate(nonDominatedindividual, newIndividual))
         {
+            qDebug("  newIndivual dominado por el archivo externo");
             isDominated = true;
             break;
         }
     }
+    qDebug("   salio del for");
     return isDominated;
 }
 
@@ -149,14 +157,14 @@ bool ExternalFile::individualDominate(Individual * xj, Individual * xi)
 
 
     // condition a
-    if ( (xj->getPerformanceDiscovery() <= xi->getPerformanceDiscovery()) &&
+    if ( (xj->getPerformanceDiscovery() >= xi->getPerformanceDiscovery()) &&
          (xj->getPerformanceLatency() <= xi->getPerformanceLatency()) )
     {
         conditionA = true;
     }
 
     // condition b
-    if ( (xj->getPerformanceDiscovery() < xi->getPerformanceDiscovery()) ||
+    if ( (xj->getPerformanceDiscovery() > xi->getPerformanceDiscovery()) ||
          (xj->getPerformanceLatency() < xi->getPerformanceLatency()) )
     {
         conditionB = true;
@@ -190,6 +198,26 @@ bool ExternalFile::newIndividualDominatesAnyoneInExternalFile(Individual * newIn
     return dominatedAnIndividual;
 }
 
+
+bool ExternalFile::newIndividualDominatesAnyoneInExternalFile(Individual * newIndividual, int &indexToReplace)
+{
+    bool dominatedAnIndividual = false;
+
+    Individual * nonDominatedindividual;
+
+    for (int i = 0; i < externalFileNonDominatedList.count(); i++)
+    {
+        nonDominatedindividual = externalFileNonDominatedList.at(i);
+        if (individualDominate(newIndividual, nonDominatedindividual))
+        {
+            dominatedAnIndividual = true;
+            indexToReplace = i;
+            break;
+        }
+    }
+    return dominatedAnIndividual;
+}
+
 void ExternalFile::addNewIndividualAndCheck(Individual * newIndividual)
 {
     qDebug("->ExternalFile::addNewIndividualAndCheck");
@@ -202,9 +230,17 @@ void ExternalFile::addNewIndividualAndCheck(Individual * newIndividual)
 
     for (int i = 0; i < externalFileNonDominatedList.count(); i++)
     {
+
         nonDominatedindividual = externalFileNonDominatedList.at(i);
+        if (newIndividual->getIndividualId() == nonDominatedindividual->getIndividualId())
+        {
+            continue;
+        }
+
+
         if (individualDominate(newIndividual, nonDominatedindividual))
         {
+            // verificar que no esta insertado
             if (!newIndividualAlreadyInserted)
             {
                 externalFileNonDominatedList.replace(i, newIndividual);
@@ -218,6 +254,41 @@ void ExternalFile::addNewIndividualAndCheck(Individual * newIndividual)
                 qDebug("marcado individuo duplicado con indice %d", i);
             }
         }
+    }
+
+    // eliminar los individuos marcados del archivo externo
+    for (int j = 0; j < markedToRemove.count(); j++)
+    {
+        externalFileNonDominatedList.removeAt(j);
+    }
+}
+
+
+void ExternalFile::addNewIndividualAndCheck(Individual * newIndividual, int indexToReplace)
+{
+    qDebug("-ExternalFile::addNewIndividualAndCheck");
+    Individual * nonDominatedindividual;
+
+    // lista para mantener los indices de los individuos dominados que se deben eliminar
+    QList<int> markedToRemove;
+
+    // reemplazar el primer individuo domimnado con newIndividual
+    externalFileNonDominatedList.replace(indexToReplace, newIndividual);
+    qDebug("------> reemplazo de individuo dominado en el archivo externo");
+
+    int i = indexToReplace+1;
+
+    while (i < externalFileNonDominatedList.count())
+    //for (int i = indexToReplace+1; i < externalFileNonDominatedList.count(); i++)
+    {
+        nonDominatedindividual = externalFileNonDominatedList.at(i);
+        if (individualDominate(newIndividual, nonDominatedindividual))
+        {
+            //externalFileNonDominatedList.removeAt(i);
+            markedToRemove.append(i);
+            qDebug("marcado individuo duplicado con indice %d", i);
+        }
+        i++;
     }
 
     // eliminar los individuos marcados del archivo externo
@@ -296,8 +367,29 @@ void ExternalFile::checkGridCellAndInsertIndividual(Individual * newIndividual, 
 }
 
 
-bool ExternalFile::isIndividualInExternalFile(Individual * ind)
+bool ExternalFile::isIndividualInExternalFile(Individual * individual)
 {
+
+    qDebug("->ExternalFile::isIndividualInExternalFile");
+    Individual * alreadyInsertedIndividual;
+
+    for (int i = 0; i < externalFileNonDominatedList.count(); i++)
+    {
+        qDebug("   dentro del for");
+        alreadyInsertedIndividual = externalFileNonDominatedList.at(i);
+        if (individual->getIndividualId() == alreadyInsertedIndividual->getIndividualId())
+        {
+            qDebug("---> el individuo EXISTE en el arcvhivo");
+            return true;
+        }
+
+    }
+
+    qDebug("   antes de salir");
+    return false;
+
+
+/*
     qDebug("->ExternalFile::isIndividualInExternalFile");
     Individual * alreadyInsertedIndividual;
 
@@ -329,6 +421,7 @@ bool ExternalFile::isIndividualInExternalFile(Individual * ind)
             return false;
         }
     }
+*/
 }
 
 

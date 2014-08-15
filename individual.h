@@ -26,33 +26,43 @@ class Individual
 {
 
 private:
+    /**
+     * @brief Identificador unico del individuo
+     */
+    unsigned int individualId;
 
     /**
-     *  Lista de parametros de un individuo
+     *  @brief Lista de parametros de un individuo
      */
     QList<double> parametersList;
 
     /**
-     * Valor de desempeno del individuo
+     * @brief Valor de desempeno del individuo
      */
     double performanceValue;
 
     /**
-     * Valor de desempeno del individuo para la funcion objetivo 1 tasa de descubrimiento
+     * @brief Valor de desempeno del individuo para la funcion objetivo 1 tasa de descubrimiento
      * de APs
      */
     double performanceDiscovery;
 
     /**
-     * Valor de desempeno del individuo para la funcion objetivo 2 latencia de full scanning
+     * @brief Valor de desempeno del individuo para la funcion objetivo 2 latencia de full scanning
      *
      */
     double performanceLatency;
 
     /**
-     * Conjunto utilizado para generar secuencias de scanning aleatorias
+     * @brief Conjunto utilizado para generar secuencias de scanning aleatorias
      */
     QSet<int> channelSequenceSet;
+
+    /**
+     * @brief Contador de encuentros ganados en un torneo
+     */
+    int wonMatchesCounter;
+
 
 public:
     /**
@@ -71,6 +81,12 @@ public:
      * @brief Constructor copia
      */
     Individual(Individual &p);
+
+    /**
+     * @brief Retorna el Id del individuo
+     * @return Retorna el Id del individuo
+     */
+    int getIndividualId();
 
     /**
      * @brief Retorna un numero de canal aleatorio.
@@ -177,6 +193,22 @@ public:
      */
     int getNumberOfParameters();
 
+    /**
+     * @brief Asigna el valor del contador de encuentros ganados en torneos
+     * @param value numero de encuentros ganados por el individuo en un torneo
+     */
+    void setWonMatchesCounter(int value);
+
+    /**
+     * @brief Retorna el contador de encuentros ganados por el individuo en un torneo
+     * @return El contador de encuentros ganados por el individuo en un torneo
+     */
+    int getWonMatchesCounter();
+
+    /**
+     * @brief Incrementa el contador de encuentros ganados del individuo en un torneo
+     */
+    void incrementWonMatchesCounter();
 
 };
 

@@ -122,12 +122,33 @@ public:
     bool newIndividualDominatesAnyoneInExternalFile(Individual * newIndividual);
 
     /**
+     * @brief Retorna verdadero si el individuo pasado como argumento domina a algun
+     * individuo existente en el archivo externo.
+     *
+     * @param newIndividual Individuo para verificar si domina a alguno existente en el archivo externo
+     * @param indexToReplace indice de la lista del archivo externo esta el individuo dominado
+     * @return Verdadero si individuo pasado como argumento domina a algun individuo
+     * existente en el archivo externo.
+     */
+    bool newIndividualDominatesAnyoneInExternalFile(Individual * newIndividual, int &indexToReplace);
+
+    /**
      * @brief Agrega un individuo que domina el archivo externo y sigue verificando si
      * hay otros individuos dominados para eliminarlos
      *
      * @param newIndividual Individuo para verificar si domina a alguno existente en el archivo externo
      */
     void addNewIndividualAndCheck(Individual * newIndividual);
+
+    /**
+     * @brief Agrega un individuo que domina el archivo externo y sigue verificando si
+     * hay otros individuos dominados para eliminarlos
+     *
+     * @param newIndividual Individuo para verificar si domina a alguno existente en el archivo externo
+     * @param indexToReplace Indice de la posicion de la lista del archivo externo donde se debe
+     * eliminar el individuo dominado y colocar el newIndividual no dominado
+     */
+    void addNewIndividualAndCheck(Individual * newIndividual, int indexToReplace);
 
     /**
      * @brief Retorna verdadero si el individuo pasado como argumento no domina a nadie ni nadie
@@ -154,7 +175,7 @@ public:
      * @param ind individuo para verificar si existe en el archivo externo
      * @return Retorna verdadero si el individuo pasado como argumento ya existe en el archivo externo
      */
-    bool isIndividualInExternalFile(Individual * ind);
+    bool isIndividualInExternalFile(Individual * individual);
 };
 
 #endif // EXTERNALFILE_H

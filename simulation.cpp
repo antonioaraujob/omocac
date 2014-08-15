@@ -24,6 +24,10 @@ inline static bool xLessThanF2(Individual *p1, Individual *p2)
     return p1->getPerformanceLatency() < p2->getPerformanceLatency();
 }
 
+// define e inicializa el miembro estatico individualIdCounter
+int Simulation::individualIdCounter = 0;
+
+
 Simulation::Simulation(int population, int extFileSize, int generations, int subintervalsGrid, int genNormative,
                        int matches, int stdDev, int aps)
 {
@@ -71,6 +75,12 @@ Simulation::~Simulation()
     delete mutation;
 }
 
+int Simulation::getNewindividualId()
+{
+    int newId = individualIdCounter++;
+    return newId;
+}
+
 void Simulation::initializePopulation()
 {
     Individual * individuo;
@@ -80,6 +90,7 @@ void Simulation::initializePopulation()
     {
         individuo = new Individual(deployedAPs);
         individuo->printIndividual();
+        qDebug("individualId: %d", individuo->getIndividualId());
         populationList.append(individuo);
     }
     qDebug("tamano de la poblacion: %d",populationList.count());

@@ -26,6 +26,13 @@ private:
     int populationSize;
 
     /**
+     * @brief Contador de identificador de individuo
+     *
+     * Usado para asignar un identificador unico para cada individuo que se creo en la simulacion.
+     */
+    static int individualIdCounter;
+
+    /**
      * @brief Tamano maximo del archivo externo de soluciones
      */
     int externalFileSize;
@@ -138,6 +145,11 @@ public:
      */
     ~Simulation();
 
+    /**
+     * @brief Retorna un nuevo identificador para un individuo creado
+     * @return Retorna un nuevo identificador para un individuo creado
+     */
+    static int getNewindividualId();
 
     // generar poblacion e inicializarla
     /**

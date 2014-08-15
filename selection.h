@@ -12,7 +12,7 @@
 
 
 /**
- * @brief Clase Selection que modela el operador de seleccion.
+ * @brief Clase Selection que abstrae el operador de seleccion.
  *
  * Se aplican los torneos segun el conjunto de reglas definidas en el articulo
  * "Un Algoritmo Cultural para Optimizacion Evolutiva Multiobjetivo" de Ricardo Landa y

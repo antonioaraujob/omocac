@@ -29,14 +29,15 @@ void Mutation::doMutation(QList<Individual *> population, double std, int deploy
     for (int i=0; i<population.count(); i++)
     {
         father = population.at(i);
+        offspring = new Individual(deployedAp);
+        //qDebug("===== offspring id: %d", offspring->getIndividualId());
 
         // crear un individuo (offspring) y mutar todos sus parametros
         for (int i=0; i<father->getNumberOfParameters(); i++)
         {
-            offspring = new Individual(deployedAp);
             newParameterValue = mutateIndividualParameter(i, 0 /*father->getParameter(i)*/,std);
-
             offspring->setParameter(i, newParameterValue);
+
         }
 
 
@@ -133,7 +134,11 @@ int Mutation::mutateIndividualParameter(int index, int mean, double std)
 
     if (isThisParameterAPs(index))
     {
-        // TODO
+        //qDebug("   isThisParameterAPs(index)");
+        if (intYi<0)
+        {
+            intYi = 0;
+        }
 
         //qDebug(qPrintable("   APs despues de mutado: "+QString::number(intYi)));
     }
