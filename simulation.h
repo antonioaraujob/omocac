@@ -325,6 +325,15 @@ public:
      */
     QList<Individual *> getOutOfGridIndividualList();
 
+    /**
+     * @brief Agrega el individuo pasado como argumento a la lista de los individuos que
+     * caen fuera de la rejilla y se deben conservar dado que generara una nueva porcion
+     * del frente de Pareto
+     *
+     * @param outOfGridIndividual individuo que cae fuera de la rejilla y se debe conservar
+     */
+    void addIndividualToOutOfGridIndividualList(Individual *outOfGridIndividual);
+
 };
 
 #endif // SIMULATION_H

@@ -80,6 +80,31 @@ void MainWindow::executeAlgorithm()
 
     qsrand((uint)QTime::currentTime().msec());
 
+
+    QFile file("/tmp/algorithmResult.txt");
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append))
+    {
+        QMessageBox msg;
+        msg.setText("No se pudo abrir el archivo /tmp/algorithmResult.txt para escribir \nresultados de la ejecucion del algoritmo.");
+        msg.exec();
+        return;
+    }
+    QTextStream out(&file);
+    out << "Inicia ejecucion del algoritmo cultural." <<"\n";
+
+    out << endl;
+    out << "Parametros de la ejecucion" << endl;
+    out << "Tamano de la poblacion: " << ui->lineEditPopulationSize->text() << endl;
+    out << "Tamano del archivo externo: " << ui->lineEditExternalFileSize->text() << endl;
+    out << "Maximo numero de generaciones: " << ui->lineEditGenerationNumber->text() << endl;
+    out << "Numero de subintervalos para la rejilla: " << ui->lineEditGridSubintervals->text() << endl;
+    out << "Numero de generaciones para actualizar parte normativa: " << ui->lineEditGnormative->text() << endl;
+    out << "Numero de encuentros por individuo en un torneo: " << QString::number(ui->lineEditPopulationSize->text().toInt()/2) << endl;
+    out << "Desviacion estandar de la mutacion gausiana: " << ui->lineEditMutationStd->text() << endl;
+    out << "Numero de APs desplegados: " << 25 << endl;
+
+
+
     // inicializar poblacion de tamano P
     simulation->initializePopulation();
 
@@ -116,6 +141,19 @@ void MainWindow::executeAlgorithm()
     // repetir por el numero maximo de generaciones
     do{
         qDebug("...generacion: %d", simulation->getCurrentGenerationNumber());
+        QFile file("/tmp/algorithmResult.txt");
+        if (!file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append))
+        {
+            QMessageBox msg;
+            msg.setText("No se pudo abrir el archivo /tmp/algorithmResult.txt para escribir \nresultados de la ejecucion del algoritmo.");
+            msg.exec();
+            return;
+        }
+        QTextStream out(&file);
+        out << endl<< "Generacion: "<< simulation->getCurrentGenerationNumber() <<"\n";
+
+
+
 
         // mutacion de la poblacion
         simulation->mutatePopulation();
@@ -185,6 +223,26 @@ void MainWindow::executeAlgorithm()
 
 
         qDebug("generacion actual: %d", simulation->getCurrentGenerationNumber());
+
+        qDebug("****************************************************************************");
+        QString aux;
+        for (int z=0; z<simulation->getExternalFile()->getExternalFileList().count(); z++)
+        {
+            simulation->getExternalFile()->getExternalFileList().at(z)->printIndividual();
+        }
+        qDebug("****************************************************************************");
+
+        QMessageBox msg;
+        QString string = "Ver el Archivo externo al final de la generacion ";
+        string.append(QString::number(simulation->getCurrentGenerationNumber()));
+        msg.setText(string);
+        msg.exec();
+
+
+
+
+
+
         simulation->incrementGeneration();
 
         // incrementar contador de generaciones para actualizar parte fenotipica normativa
@@ -205,12 +263,22 @@ void MainWindow::populateListView()
 {
     QStringList individuals;
 
+
+    QFile file("/tmp/externalFile.txt");
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append))
+        return;
+    QTextStream out(&file);
+    out << endl << "Poblacion del archivo externo al final del algoritmo cultural: " << "\n";
+
+
+
     QString aux;
     for (int z=simulation->getExternalFile()->getExternalFileList().count()-1; z>=0; z-- )
     {
         aux.append(simulation->getExternalFile()->getExternalFileList().at(z)->getIndividualAsQString());
         individuals << aux;
         aux.clear();
+        out << simulation->getExternalFile()->getExternalFileList().at(z)->getIndividualAsQString() << "\n";
     }
 
     QStringListModel *model = new QStringListModel();

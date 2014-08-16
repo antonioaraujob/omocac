@@ -115,7 +115,7 @@ int NormativeGrid::getCount(int f1, int f2)
 void NormativeGrid::buildSubintervalsF1(NormativePhenotypicPart *nPhenotypicPart)
 {
     double widthF1 = (nPhenotypicPart->getUpperF1() - nPhenotypicPart->getLowerF1()) / subIntervalNumber;
-    qDebug("---ancho del intervaloF1: %f", widthF1);
+    //qDebug("---ancho del intervaloF1: %f", widthF1);
 
     double l = nPhenotypicPart->getLowerF1();
     double u = 0;
@@ -124,7 +124,7 @@ void NormativeGrid::buildSubintervalsF1(NormativePhenotypicPart *nPhenotypicPart
     for (int i = 1; i <= 10; i++)
     {
         u = nPhenotypicPart->getLowerF1()+widthF1*i;
-        qDebug("%f - %f", l, u);
+        //qDebug("%f - %f", l, u);
         GridSubInterval * subInterval = new GridSubInterval(l,u);
         subIntervalListF1.append(subInterval);
 
@@ -137,7 +137,7 @@ void NormativeGrid::buildSubintervalsF1(NormativePhenotypicPart *nPhenotypicPart
 void NormativeGrid::buildSubintervalsF2(NormativePhenotypicPart * nPhenotypicPart)
 {
     double widthF2 = (nPhenotypicPart->getUpperF2() - nPhenotypicPart->getLowerF2()) / subIntervalNumber;
-    qDebug("---ancho del intervaloF2: %f", widthF2);
+    //qDebug("---ancho del intervaloF2: %f", widthF2);
 
     double l = nPhenotypicPart->getLowerF2();
     double u = 0;
@@ -146,7 +146,7 @@ void NormativeGrid::buildSubintervalsF2(NormativePhenotypicPart * nPhenotypicPar
     for (int i = 1; i <= 10; i++)
     {
         u = nPhenotypicPart->getLowerF2()+widthF2*i;
-        qDebug("%f - %f", l, u);
+        //qDebug("%f - %f", l, u);
         GridSubInterval * subInterval = new GridSubInterval(l,u);
         subIntervalListF2.append(subInterval);
 

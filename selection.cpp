@@ -43,6 +43,7 @@ Selection::Selection()
 {
     selectedPopulation.clear();
     tournamentsWinners.clear();
+    outOfGridList.clear();
 }
 
 Selection::~Selection()
@@ -56,7 +57,9 @@ QList<Individual *> Selection::getSelectedPopulation()
 
 void Selection::doSelection(QList<Individual *> population2p, int matches, NormativeGrid *nGrid)
 {
+    qDebug("Selection::doSelection");
     selectedPopulation.clear();
+    outOfGridList.clear();
 
     // lista de adversarios de tamano matches
     QList<Individual *> adversaryList;
@@ -162,7 +165,7 @@ void Selection::doSelection(QList<Individual *> population2p, int matches, Norma
     // evaluar cada individuo de la poblacion seleccionada o hacer fuera en la clase Simulation
     // TODO
 
-    qDebug("TAMANO DE LA POBLACION SELECCIONADA DESPUES DE LOS TORNEOS: %d", selectedPopulation.count());
+    qDebug("Tamano de la lista de individuos que cayeron fuera de la rejilla: %d", outOfGridList.count());
 }
 
 void Selection::makeTournaments(int individualIndex, Individual * individual, QList<Individual *> adversaryList, NormativeGrid * nGrid)
@@ -174,15 +177,22 @@ void Selection::makeTournaments(int individualIndex, Individual * individual, QL
     {
         adversary = adversaryList.at(i);
 
+        qDebug("encuentro entre:");
+        individual->printIndividual();
+        adversary->printIndividual();
+        qDebug(" ");
+
         // verificar condiciones:
         //
         // 1) si un individuo domina a otro gana el individuo no dominado
         if (individualDominate(individual, adversary))
         {
+            qDebug("   individual domina a adversary");
             individual->incrementWonMatchesCounter();
         }
         else if (individualDominate(adversary, individual))
         {
+            qDebug("   adversary domina a individual");
             adversary->incrementWonMatchesCounter();
         }
         else
@@ -227,21 +237,27 @@ void Selection::makeTournaments(int individualIndex, Individual * individual, QL
                     // b) si alguno cae fuera de la rejilla, gana el que este afuera
                     if ( !nGrid->individualInsideGrid(individual) )
                     {
-                        qDebug("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                        qDebug("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
                         individual->incrementWonMatchesCounter();
                         qDebug("individuo cayo fuera de la rejilla");
                         individual->printIndividual();
-                        qDebug("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+                        // agregar el individuo a la lista de los que estan fuera de la rejilla
+                        addIndividualToOutOfGridIndividualList(individual);
+                        qDebug("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
                     }
                     else
                     {
                         if ( !nGrid->individualInsideGrid(adversary) )
                         {
-                            qDebug("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                            qDebug("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
                             adversary->incrementWonMatchesCounter();
                             qDebug("adversario cayo fuera de la rejilla");
                             adversary->printIndividual();
-                            qDebug("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+                            // agregar el individuo a la lista de los que estan fuera de la rejilla
+                            addIndividualToOutOfGridIndividualList(adversary);
+                            qDebug("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
                         }
                     }
                 }
@@ -388,6 +404,36 @@ bool Selection::nonComparableIndividuals(Individual *a, Individual * b)
 }
 
 
+QList<Individual *> Selection::getOutOfGridList()
+{
+    return outOfGridList;
+}
 
+void Selection::addIndividualToOutOfGridIndividualList(Individual * outOfGridIndividual)
+{
+    qDebug("Selection::addIndividualToOutOfGridIndividualList");
 
+    if (outOfGridList.empty())
+    {
+        outOfGridList.append(outOfGridIndividual);
+        qDebug("lista vacio, se inserto el individuo que cayo fuera de la grid");
+        return;
+    }
 
+    // verificar que el individuo no exista; si no existe se agrega en caso contrario se ignora
+
+    Individual * auxIndividual;
+
+    for (int i=0; i<outOfGridList.count(); i++)
+    {
+        auxIndividual = outOfGridList.at(i);
+
+        if (auxIndividual->getIndividualId() == outOfGridIndividual->getIndividualId())
+        {
+            qDebug("el individuo que cayo fuera de la grid ya se inserto en la lista y se ignora");
+            return;
+        }
+    }
+    outOfGridList.append(outOfGridIndividual);
+    qDebug("se inserto el individuo que cayo fuera de la grid a la lista");
+}

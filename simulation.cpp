@@ -1,5 +1,8 @@
 #include "simulation.h"
 
+#include <QFile>
+#include <QMessageBox>
+#include <QTextStream>
 
 /**
  * @brief Funcion de comparacion de individuos con respecto al valor de desempeno de descubrimiento
@@ -24,7 +27,9 @@ inline static bool xLessThanF2(Individual *p1, Individual *p2)
     return p1->getPerformanceLatency() < p2->getPerformanceLatency();
 }
 
-// define e inicializa el miembro estatico individualIdCounter
+/**
+ * @brief Define e inicializa el miembro estatico individualIdCounter
+ */
 int Simulation::individualIdCounter = 0;
 
 
@@ -85,6 +90,18 @@ void Simulation::initializePopulation()
 {
     Individual * individuo;
 
+
+    QFile file("/tmp/algorithmResult.txt");
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append))
+    {
+        QMessageBox msg;
+        msg.setText("Simulation::initializePopulation(): No se pudo abrir el archivo /tmp/algorithmResult.txt\n para escribir resultados de la ejecucion del algoritmo.");
+        return;
+    }
+    QTextStream out(&file);
+    out << endl << "Inicializacion de la poblacion." <<"\n";
+
+
     // inicializacion de la poblacion
     for (int i = 0; i < populationSize; i++)
     {
@@ -92,6 +109,8 @@ void Simulation::initializePopulation()
         individuo->printIndividual();
         qDebug("individualId: %d", individuo->getIndividualId());
         populationList.append(individuo);
+
+        out << individuo->getIndividualAsQString() << endl;
     }
     qDebug("tamano de la poblacion: %d",populationList.count());
     //return populationList;
@@ -130,11 +149,42 @@ void Simulation::initializeNormativePhenotypicPart()
            normativePhenotipicPart->getLowerF1(),normativePhenotipicPart->getUpperF1(),
            normativePhenotipicPart->getLowerF2(), normativePhenotipicPart->getUpperF2());
 
+
+    QFile file("/tmp/algorithmResult.txt");
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append))
+    {
+        QMessageBox msg;
+        msg.setText("Simulation::initializeNormativePhenotypicPart(): No se pudo abrir el archivo /tmp/algorithmResult.txt para escribir \nresultados de la ejecucion del algoritmo.");
+        return;
+    }
+
+    QTextStream out(&file);
+    out << endl <<"Inicializacion de la parte normativa fenotipica." <<"\n";
+
+    out << "| lF1: " << normativePhenotipicPart->getLowerF1() <<
+           "| uF1: " << normativePhenotipicPart->getUpperF1() <<
+           "| lF2: " << normativePhenotipicPart->getLowerF2() <<
+           "| uF2: " << normativePhenotipicPart->getUpperF2() << "|" <<endl;
+
+
 }
 
 void Simulation::initializeGrid()
 {
     nGrid = new NormativeGrid(gridSubintervalsNumber, normativePhenotipicPart);
+
+    QFile file("/tmp/algorithmResult.txt");
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append))
+    {
+        QMessageBox msg;
+        msg.setText("Simulation::initializeGrid(): No se pudo abrir el archivo /tmp/algorithmResult.txt para escribir \nresultados de la ejecucion del algoritmo.");
+        return;
+    }
+
+    QTextStream out(&file);
+    out << endl <<"Inicializacion de la rejilla." <<"\n";
+
+
 }
 
 
@@ -196,6 +246,7 @@ void Simulation::updateNormativePhenotypicPart()
     qDebug("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 
     extFileAndOutOfGridIndividualList.clear();
+    outOfGridIndividualList.clear();
 
 
 
@@ -261,7 +312,7 @@ void Simulation::updateGrid(QList<Individual *> nonDominated)
     ind = nonDominated.at(1);
     nGrid->addIndividualToGrid(ind);
 */
-
+    qDebug("Simulation::updateGrid");
     Individual * auxIndividual;
     for (int i=0; i<nonDominated.count(); i++)
     {
@@ -269,9 +320,9 @@ void Simulation::updateGrid(QList<Individual *> nonDominated)
 
         if(!nGrid->individualInsideGrid(auxIndividual))
         {
-            qDebug("%%%%%%%% el individuo no pertenece a la grid");
-            auxIndividual->printIndividual();
-            outOfGridIndividualList.append(auxIndividual);
+            //qDebug("%%%%%%%% el individuo no pertenece a la grid");
+            //auxIndividual->printIndividual();
+            //outOfGridIndividualList.append(auxIndividual);
         }
         else
         {
@@ -292,6 +343,25 @@ void Simulation::mutatePopulation()
     mutatedPopulationList = mutation->getNewPopulation();
 
     mutation->printNewPopulation();
+
+    // agregar resultados a archivo
+    QFile file("/tmp/algorithmResult.txt");
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append))
+    {
+        QMessageBox msg;
+        msg.setText("Simulation::mutatePopulation(): No se pudo abrir el archivo /tmp/algorithmResult.txt\n para escribir resultados de la ejecucion del algoritmo.");
+        return;
+    }
+    QTextStream out(&file);
+    out << endl << "Mutacion de la poblacion." <<"\n";
+    out << endl;
+
+    Individual * auxIndividual;
+    for (int i=0; i<mutatedPopulationList.count(); i++)
+    {
+        auxIndividual = mutatedPopulationList.at(i);
+        out << auxIndividual->getIndividualAsQString() << endl;
+    }
 }
 
 void Simulation::selectPopulation()
@@ -299,12 +369,63 @@ void Simulation::selectPopulation()
     selection->doSelection(mutatedPopulationList, matchesPerIndividuals, nGrid);
 
     populationList = selection->getSelectedPopulation();
+
+    //
+    outOfGridIndividualList = selection->getOutOfGridList();
+
+    for (int i=0; i<selection->getOutOfGridList().count(); i++)
+    {
+        outOfGridIndividualList.append(selection->getOutOfGridList().at(i));
+    }
+
+
+
+    // agregar resultados a archivo
+    QFile file("/tmp/algorithmResult.txt");
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append))
+    {
+        QMessageBox msg;
+        msg.setText("Simulation::selectPopulation(): No se pudo abrir el archivo /tmp/algorithmResult.txt\n para escribir resultados de la ejecucion del algoritmo.");
+        return;
+    }
+    QTextStream out(&file);
+    out << endl << "Seleccion de poblacion de tamano P." <<"\n";
+    out << endl;
+
+    Individual * auxIndividual;
+    for (int i=0; i<populationList.count(); i++)
+    {
+        auxIndividual = populationList.at(i);
+        out << auxIndividual->getIndividualAsQString() << endl;
+    }
+
 }
 
 
 void Simulation::addNonDominatedIndividualsToExternalFile(QList<Individual *> ndIndividualList)
 {
     externalFile->addNonDominatedIndividuals(ndIndividualList, nGrid);
+
+
+    // agregar resultados a archivo
+    QFile file("/tmp/algorithmResult.txt");
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append))
+    {
+        QMessageBox msg;
+        msg.setText("Simulation::addNonDominatedIndividualsToExternalFile(): No se pudo abrir el archivo /tmp/algorithmResult.txt\n para escribir resultados de la ejecucion del algoritmo.");
+        return;
+    }
+    QTextStream out(&file);
+    out << endl << "Individuos del archivo externo." <<"\n";
+    out << endl;
+
+    Individual * auxIndividual;
+    for (int i=0; i<externalFile->getExternalFileList().count(); i++)
+    {
+        auxIndividual = externalFile->getExternalFileList().at(i);
+        out << auxIndividual->getIndividualAsQString() << endl;
+    }
+
 }
 
 void Simulation::incrementGeneration()
@@ -487,3 +608,24 @@ QList<Individual *> Simulation::getOutOfGridIndividualList()
     return outOfGridIndividualList;
 }
 
+
+void Simulation::addIndividualToOutOfGridIndividualList(Individual * outOfGridIndividual)
+{
+    // verificar que el individuo no exista; si no existe se agrega en caso contrario se ignora
+
+    Individual * auxIndividual;
+
+    for (int i=0; i<outOfGridIndividualList.count(); i++)
+    {
+        auxIndividual = outOfGridIndividualList.at(i);
+
+        if (auxIndividual->getIndividualId() == outOfGridIndividual->getIndividualId())
+        {
+
+        }
+        else
+        {
+            outOfGridIndividualList.append(outOfGridIndividual);
+        }
+    }
+}

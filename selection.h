@@ -37,6 +37,14 @@ private:
      */
     QMap<int, int> tournamentsWinners;
 
+
+    /**
+     * @brief Lista de individuos que caen fuera de la grid y se deben mantener porque generaran
+     * una nueva porcion del frente de Pareto
+     */
+    QList<Individual *> outOfGridList;
+
+
 public:
 
     /**
@@ -101,6 +109,20 @@ public:
      * @return Verdaderon si los individuos pasados como argumento son no comparables.
      */
     bool nonComparableIndividuals(Individual * a, Individual * b);
+
+    /**
+     * @brief Retorna la lista de individuos que estan fuera de la grid y se deben mantener
+     * @return Lista de individuos que estan fuera de la grid y se deben mantener
+     */
+    QList<Individual *> getOutOfGridList();
+
+    /**
+     * @brief Agrega el individuo pasado como argumento a la lista de individuos que caen fuera de la
+     * rejilla y se deben conservar para generar una nueva porcion del frente de Pareto
+     *
+     * @param outOfGridIndividual Individuo que se debe agregar a la lista
+     */
+    void addIndividualToOutOfGridIndividualList(Individual * outOfGridIndividual);
 
 };
 
