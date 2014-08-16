@@ -147,6 +147,66 @@ void Simulation::updateNormativePhenotypicPart()
     // obtener la lista de individuos no dominados del archivo externo
     extFileNonDominatedPopulation = externalFile->getExternalFileList();
 
+    // crear lista temporal de individuos no dominados del archivo externo unidos con
+    // los individuos que cayeron fuera de la rejilla en la generacion actual
+    QList<Individual *> extFileAndOutOfGridIndividualList;
+    extFileAndOutOfGridIndividualList = externalFile->getExternalFileList();
+
+    for (int i=0; i<getOutOfGridIndividualList().count();i++)
+    {
+        extFileAndOutOfGridIndividualList.append(getOutOfGridIndividualList().at(i));
+    }
+
+
+    // ordenarlos los no dominados con respecto a la funcion objetivo 1 de menor a mayor
+    qSort(extFileAndOutOfGridIndividualList.begin(), extFileAndOutOfGridIndividualList.end(), xLessThanF1);
+
+    // tomar los limites inferior y superior
+    int lF1 = extFileAndOutOfGridIndividualList.at(0)->getPerformanceDiscovery();
+    int uF1 = extFileAndOutOfGridIndividualList.at(extFileAndOutOfGridIndividualList.count()-1)->getPerformanceDiscovery();
+
+    // ordenarlos los no dominados con respecto a la funcion objetivo 2 de menor a mayor
+    qSort(extFileAndOutOfGridIndividualList.begin(), extFileAndOutOfGridIndividualList.end(), xLessThanF2);
+
+    int lF2 = extFileAndOutOfGridIndividualList.at(0)->getPerformanceLatency();
+    int uF2 = extFileAndOutOfGridIndividualList.at(extFileAndOutOfGridIndividualList.count()-1)->getPerformanceLatency();
+
+    // asigna los extremos de las funciones objetivo con respecto a los individuos no dominados
+    normativePhenotipicPart->updateNormativePhenotypicPart(lF1, uF1, lF2, uF2);
+
+    qDebug("nueva parte fenotipica normativa:");
+    qDebug("| lF1: %f | uF1: %f | lF2: %f | uF2: %f |",
+           normativePhenotipicPart->getLowerF1(),normativePhenotipicPart->getUpperF1(),
+           normativePhenotipicPart->getLowerF2(), normativePhenotipicPart->getUpperF2());
+
+    // Reconstruir la rejilla con los nuevos valores de lowerF1, upperF1, lowerF2, upperF2.
+    delete nGrid;
+
+    // Reinicializar todos los contadores de la rejilla en cero.
+    nGrid = new NormativeGrid(gridSubintervalsNumber, normativePhenotipicPart);
+
+    nGrid->printGrid();
+
+    // Agregar todos los individuos del archivo externo al contador de su celda correspondiente.
+    // De esta manera el espacio de creencias está listo de nuevo para su uso.
+    updateGrid(extFileNonDominatedPopulation);
+
+    qDebug("++++++grid despues de actualizada con los individuos del archivo externo");
+    nGrid->printGrid();
+    qDebug("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+
+    extFileAndOutOfGridIndividualList.clear();
+
+
+
+/*
+    qDebug("Simulation::updateNormativePhenotypicPart");
+
+    QList<Individual *> extFileNonDominatedPopulation;
+
+    // obtener la lista de individuos no dominados del archivo externo
+    extFileNonDominatedPopulation = externalFile->getExternalFileList();
+
     // ordenarlos los no dominados con respecto a la funcion objetivo 1 de menor a mayor
     qSort(extFileNonDominatedPopulation.begin(), extFileNonDominatedPopulation.end(), xLessThanF1);
 
@@ -183,9 +243,7 @@ void Simulation::updateNormativePhenotypicPart()
     qDebug("++++++grid despues de actualizada con los individuos del archivo externo");
     nGrid->printGrid();
     qDebug("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-
-
-
+*/
 }
 
 
@@ -213,11 +271,13 @@ void Simulation::updateGrid(QList<Individual *> nonDominated)
         {
             qDebug("%%%%%%%% el individuo no pertenece a la grid");
             auxIndividual->printIndividual();
+            outOfGridIndividualList.append(auxIndividual);
         }
-
-        nGrid->addIndividualToGrid(auxIndividual);
+        else
+        {
+            nGrid->addIndividualToGrid(auxIndividual);
+        }
     }
-
 }
 
 void Simulation::printGrid()
@@ -422,5 +482,8 @@ int Simulation::getgNormative()
     return gNormative;
 }
 
-
+QList<Individual *> Simulation::getOutOfGridIndividualList()
+{
+    return outOfGridIndividualList;
+}
 

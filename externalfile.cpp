@@ -60,6 +60,8 @@ void ExternalFile::addNonDominatedIndividuals(QList<Individual *> nonDominatedLi
 
     int indexToReplaceIndividual = 0;
 
+    //Individual * recentIndividual;
+
     // verificar las condiciones para agregar
 
     for (int i = 0; i < nonDominatedListToInsert.count(); i++)
@@ -80,6 +82,10 @@ void ExternalFile::addNonDominatedIndividuals(QList<Individual *> nonDominatedLi
         {
             qDebug(" individuo no esta dominado por el archivo externo; se inserta");
             externalFileNonDominatedList.append(newIndividual);
+
+            // agregar el individuo nuevo en la lista de individuos de la generacion
+            currentGenerationIndividualList.append(newIndividual);
+
         }
         // 2) Si newIndividual domina a algun individuo en el archivo externo, entonces
         // se introduce en su lugar, pero continua comparandose contra todos los demas.
@@ -96,6 +102,9 @@ void ExternalFile::addNonDominatedIndividuals(QList<Individual *> nonDominatedLi
             if (externalFileNonDominatedList.count() < maxExternalFileSize)
             {
                 externalFileNonDominatedList.append(newIndividual);
+
+                // agregar el individuo nuevo en la lista de individuos de la generacion
+                currentGenerationIndividualList.append(newIndividual);
             }
             else
             {
@@ -276,6 +285,9 @@ void ExternalFile::addNewIndividualAndCheck(Individual * newIndividual, int inde
     externalFileNonDominatedList.replace(indexToReplace, newIndividual);
     qDebug("------> reemplazo de individuo dominado en el archivo externo");
 
+    // agregar el individuo nuevo en la lista de individuos de la generacion
+    currentGenerationIndividualList.append(newIndividual);
+
     int i = indexToReplace+1;
 
     while (i < externalFileNonDominatedList.count())
@@ -295,6 +307,7 @@ void ExternalFile::addNewIndividualAndCheck(Individual * newIndividual, int inde
     for (int j = 0; j < markedToRemove.count(); j++)
     {
         externalFileNonDominatedList.removeAt(j);
+
     }
 }
 
@@ -362,6 +375,9 @@ void ExternalFile::checkGridCellAndInsertIndividual(Individual * newIndividual, 
         {
             // reemplazar el individuo con newIndivual
             externalFileNonDominatedList.replace(i, newIndividual);
+
+            // agregar el individuo nuevo en la lista de individuos de la generacion
+            currentGenerationIndividualList.append(newIndividual);
         }
     }
 }
@@ -423,6 +439,19 @@ bool ExternalFile::isIndividualInExternalFile(Individual * individual)
     }
 */
 }
+
+
+QList<Individual *> ExternalFile::getCurrentGenerationIndividualList()
+{
+    return currentGenerationIndividualList;
+}
+
+
+void ExternalFile::resetCurrentGenerationIndividualList()
+{
+    currentGenerationIndividualList.clear();
+}
+
 
 
 

@@ -25,6 +25,13 @@ private:
      */
     QList<Individual *> externalFileNonDominatedList;
 
+
+    /**
+     * @brief Lista temporal de individuos no dominados de la generacion actual
+     */
+    QList<Individual *> currentGenerationIndividualList;
+
+
 public:
 
     /**
@@ -176,6 +183,18 @@ public:
      * @return Retorna verdadero si el individuo pasado como argumento ya existe en el archivo externo
      */
     bool isIndividualInExternalFile(Individual * individual);
+
+    /**
+     * @brief Retorna la lista de individuos no dominados insertados en el archivo externo
+     * @return Retorna la lista de individuos no dominados insertados en el archivo externo
+     */
+    QList<Individual *> getCurrentGenerationIndividualList();
+
+    /**
+     * @brief Remueve todos los elementos de la lista de individuos insertados en el archivo externo
+     * de la generacion actual
+     */
+    void resetCurrentGenerationIndividualList();
 };
 
 #endif // EXTERNALFILE_H

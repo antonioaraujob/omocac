@@ -121,6 +121,13 @@ private:
      */
     Selection * selection;
 
+
+    /**
+     * @brief Lista de individuos no dominados seleccionados del torneo que caen fuera de los
+     * intervalos de la rejilla
+     */
+    QList<Individual *> outOfGridIndividualList;
+
 public:
 
     /**
@@ -201,9 +208,10 @@ public:
 
     /**
      * @brief Actualiza la rejilla del espacio de creencias con los individuos no dominados
-     * agregados al archivo externo
+     * agregados al archivo externo en la generacion actual
      *
-     * @param nonDominated lista de individuos no dominados
+     * @param nonDominated lista de individuos no dominados agregados al archivo externo en la
+     * generacion actual
      */
     void updateGrid(QList<Individual *> nonDominated);
 
@@ -310,6 +318,12 @@ public:
      * la parte fenotipica normativa
      */
     int getgNormative();
+
+    /**
+     * @brief Retorna la lista de inviduos no dominados que cayeron fuera de la rejilla
+     * del espacio de creencias en la generacion actual
+     */
+    QList<Individual *> getOutOfGridIndividualList();
 
 };
 

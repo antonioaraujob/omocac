@@ -170,7 +170,8 @@ void MainWindow::executeAlgorithm()
         // TODO: se necesita una funcion que retorne los individuos recien agregados al archivo externo durante la
         // generacion actual
 
-        simulation->updateGrid(nonDominatedList);
+        simulation->updateGrid(simulation->getExternalFile()->getCurrentGenerationIndividualList());
+        simulation->getExternalFile()->resetCurrentGenerationIndividualList();
         //qDebug("...despues de actualizar la rejilla");
 /*
         if (countOfGenerations == simulation->getgNormative())
