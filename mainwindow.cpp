@@ -17,7 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    this->setFixedSize(600, 577);
+    this->setFixedSize(832, 577);
 
     // Validadores para los parametros del algoritmo
     QValidator * validatorPopSize = new QIntValidator(1, 1000, this);
@@ -56,6 +56,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     connect(ui->pushButtonRun, SIGNAL(clicked()), this, SLOT(executeAlgorithm()));
+
 
 
 }
@@ -236,11 +237,7 @@ void MainWindow::executeAlgorithm()
         QString string = "Ver el Archivo externo al final de la generacion ";
         string.append(QString::number(simulation->getCurrentGenerationNumber()));
         msg.setText(string);
-        msg.exec();
-
-
-
-
+        //msg.exec();
 
 
         simulation->incrementGeneration();
@@ -254,8 +251,12 @@ void MainWindow::executeAlgorithm()
     qDebug("TERMINO EL ALGORITMO CULTURAL!");
 
 
-
+    // poblar la lista de individuos no dominados del archivo externo
     populateListView();
+
+    // generar el grafico
+    setupCustomPlot(ui->customPlot);
+
 }
 
 
@@ -285,6 +286,87 @@ void MainWindow::populateListView()
     model->setStringList(individuals);
 
     ui->listViewBestIndividuals->setModel(model);
+
+
+    int numberOfIndividuals = simulation->getExternalFile()->getExternalFileList().count();
+    ui->labelNonDominatedNUmber->setText(QString::number(numberOfIndividuals));
+
+}
+
+
+void MainWindow::setupCustomPlot(QCustomPlot *customPlot)
+{
+
+    int count = simulation->getExternalFile()->getExternalFileList().count();
+    QVector<double> discovery(count), latency(count);
+
+    int i = 0;
+
+    Individual * individual;
+    for (int z=simulation->getExternalFile()->getExternalFileList().count()-1; z>=0; z-- )
+    {
+        individual = simulation->getExternalFile()->getExternalFileList().at(z);
+        discovery[i] = individual->getPerformanceDiscovery();
+        latency[i] = individual->getPerformanceLatency();
+        i++;
+    }
+
+
+    // create graph and assign data to it:
+    customPlot->addGraph();
+    customPlot->graph(0)->setPen(QPen(Qt::red)); // line color blue for first graph
+    customPlot->graph(0)->setData(discovery, latency);
+    // give the axes some labels:
+    customPlot->xAxis->setLabel("Descubierta");
+    customPlot->yAxis->setLabel("Latencia");
+    // set axes ranges, so we see all data:
+    customPlot->xAxis->setRange(0, 75);
+    customPlot->yAxis->setRange(0, 300);
+
+    customPlot->yAxis->grid()->setSubGridVisible(true);
+
+    ui->customPlot->replot();
+
+    // show legend:
+    //customPlot->legend->setVisible(true);
+
+/*
+    // add two new graphs and set their look:
+    customPlot->addGraph();
+    customPlot->graph(0)->setPen(QPen(Qt::blue)); // line color blue for first graph
+    customPlot->graph(0)->setBrush(QBrush(QColor(0, 0, 255, 20))); // first graph will be filled with translucent blue
+    customPlot->addGraph();
+    customPlot->graph(1)->setPen(QPen(Qt::red)); // line color red for second graph
+    // generate some points of data (y0 for first, y1 for second graph):
+    QVector<double> x(250), y0(250), y1(250);
+    for (int i=0; i<250; ++i)
+    {
+      x[i] = i;
+      y0[i] = exp(-i/150.0)*cos(i/10.0); // exponentially decaying cosine
+      y1[i] = exp(-i/150.0);             // exponential envelope
+    }
+    // configure right and top axis to show ticks but no labels:
+    // (see QCPAxisRect::setupFullAxesBox for a quicker method to do this)
+    customPlot->xAxis2->setVisible(true);
+    customPlot->xAxis2->setTickLabels(false);
+    customPlot->yAxis2->setVisible(true);
+    customPlot->yAxis2->setTickLabels(false);
+    // make left and bottom axes always transfer their ranges to right and top axes:
+    connect(customPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), customPlot->xAxis2, SLOT(setRange(QCPRange)));
+    connect(customPlot->yAxis, SIGNAL(rangeChanged(QCPRange)), customPlot->yAxis2, SLOT(setRange(QCPRange)));
+    // pass data points to graphs:
+    customPlot->graph(0)->setData(x, y0);
+    customPlot->graph(1)->setData(x, y1);
+    // let the ranges scale themselves so graph 0 fits perfectly in the visible area:
+    customPlot->graph(0)->rescaleAxes();
+    // same thing for graph 1, but only enlarge ranges (in case graph 1 is smaller than graph 0):
+    customPlot->graph(1)->rescaleAxes(true);
+    // Note: we could have also just called customPlot->rescaleAxes(); instead
+    // Allow user to drag axis ranges with mouse, zoom with mouse wheel and select graphs by clicking:
+    customPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
+
+*/
+
 }
 
 /*

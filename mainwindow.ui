@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>600</width>
+    <width>832</width>
     <height>577</height>
    </rect>
   </property>
@@ -14,35 +14,6 @@
    <string>Algoritmo Cultural</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QFrame" name="frame_2">
-    <property name="geometry">
-     <rect>
-      <x>430</x>
-      <y>20</y>
-      <width>161</width>
-      <height>281</height>
-     </rect>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::StyledPanel</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Raised</enum>
-    </property>
-    <widget class="QPushButton" name="pushButtonRun">
-     <property name="geometry">
-      <rect>
-       <x>40</x>
-       <y>40</y>
-       <width>81</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Ejecutar</string>
-     </property>
-    </widget>
-   </widget>
    <widget class="QFrame" name="frame">
     <property name="geometry">
      <rect>
@@ -84,10 +55,17 @@
       </rect>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="5" column="0">
-       <widget class="QLabel" name="label_9">
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>Frecuencia de actualizacion de parte normativa</string>
+         <string>Numero maximo de generaciones</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Tamaño de la poblacion</string>
         </property>
        </widget>
       </item>
@@ -101,6 +79,13 @@
         </property>
         <property name="text">
          <string>3</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>Desviacion estandar</string>
         </property>
        </widget>
       </item>
@@ -118,24 +103,10 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
-       <widget class="QLineEdit" name="lineEditGenerationNumber">
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_7">
         <property name="text">
-         <string>3</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="1">
-       <widget class="QLineEdit" name="lineEditGridSubintervals">
-        <property name="text">
-         <string>10</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>Tamaño de la poblacion</string>
+         <string>Tamaño maximo del archivo externo</string>
         </property>
        </widget>
       </item>
@@ -146,10 +117,17 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_3">
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="lineEditGenerationNumber">
         <property name="text">
-         <string>Numero maximo de generaciones</string>
+         <string>3</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QLabel" name="label_9">
+        <property name="text">
+         <string>Frecuencia de actualizacion de parte normativa</string>
         </property>
        </widget>
       </item>
@@ -160,15 +138,15 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="label_7">
+      <item row="3" column="1">
+       <widget class="QLineEdit" name="lineEditExternalFileSize">
         <property name="text">
-         <string>Tamaño maximo del archivo externo</string>
+         <string>10</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
-       <widget class="QLineEdit" name="lineEditExternalFileSize">
+      <item row="4" column="1">
+       <widget class="QLineEdit" name="lineEditGridSubintervals">
         <property name="text">
          <string>10</string>
         </property>
@@ -184,10 +162,10 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_5">
+      <item row="7" column="0">
+       <widget class="QPushButton" name="pushButtonRun">
         <property name="text">
-         <string>Desviacion estandar</string>
+         <string>Ejecutar</string>
         </property>
        </widget>
       </item>
@@ -199,7 +177,7 @@
      <rect>
       <x>10</x>
       <y>320</y>
-      <width>581</width>
+      <width>811</width>
       <height>191</height>
      </rect>
     </property>
@@ -214,22 +192,67 @@
       <rect>
        <x>9</x>
        <y>50</y>
-       <width>561</width>
+       <width>791</width>
        <height>131</height>
       </rect>
      </property>
     </widget>
-    <widget class="QLabel" name="label_6">
+    <widget class="QWidget" name="horizontalLayoutWidget">
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>11</y>
-       <width>321</width>
-       <height>31</height>
+       <y>10</y>
+       <width>481</width>
+       <height>41</height>
       </rect>
      </property>
-     <property name="text">
-      <string>Archivo externo de individuos no dominados</string>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLabel" name="labelExternalFile">
+        <property name="text">
+         <string>Archivo externo de individuos no dominados:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="labelNonDominatedNUmber">
+        <property name="font">
+         <font>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </widget>
+   <widget class="QFrame" name="frame_4">
+    <property name="geometry">
+     <rect>
+      <x>420</x>
+      <y>10</y>
+      <width>401</width>
+      <height>291</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+    <widget class="QCustomPlot" name="customPlot" native="true">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>371</width>
+       <height>241</height>
+      </rect>
      </property>
     </widget>
    </widget>
@@ -239,7 +262,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>600</width>
+     <width>832</width>
      <height>19</height>
     </rect>
    </property>
@@ -267,6 +290,14 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>QCustomPlot</class>
+   <extends>QWidget</extends>
+   <header>qcustomplot.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>lineEditPopulationSize</tabstop>
   <tabstop>lineEditGenerationNumber</tabstop>

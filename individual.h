@@ -150,6 +150,17 @@ public:
      */
     double getPerformanceValue();
 
+
+    /**
+     *  @brief Calcula el valor de desempeno del descubrimiento
+     */
+    void calculateDiscoveryValue();
+
+    /**
+     *  @brief Calcula el valor de desempeno de la latencia
+     */
+    void calculateLatencyValue();
+
     /**
      *  @brief Establece el valor de desempeno de la funcion objetivo 1 tasa de descubrimiento
      * @param performance valor de desempeno
@@ -160,7 +171,7 @@ public:
      * @brief Retorna el valor de desempeno del individuo para la funcion objetivo 1 tasa de descubrimiento
      * @return valor de desempeno de la tasa de descubrimiento del individuo
      */
-    double getPerformanceDiscovery();
+    double getPerformanceDiscovery() const;
 
     /**
      *  @brief Establece el valor de desempeno de la funcion objetivo 2 latencia
@@ -172,7 +183,7 @@ public:
      * @brief Retorna el valor de desempeno del individuo para la funcion objetivo 2 latencia
      * @return valor de desempeno de la latencia
      */
-    double getPerformanceLatency();
+    double getPerformanceLatency() const;
 
     /**
      * @brief Asigna el valor del parametro en la posicion i
@@ -185,13 +196,13 @@ public:
      * @brief Retorna el valor del parametro en la posicion i
      * @param i indice del parametro a retornar
      */
-    double getParameter(int i);
+    double getParameter(int i) const;
 
     /**
      * @brief Retorna el numero de parametros del individuo
      * @return Numero de parametros del individuo
      */
-    int getNumberOfParameters();
+    int getNumberOfParameters() const;
 
     /**
      * @brief Asigna el valor del contador de encuentros ganados en torneos
@@ -209,6 +220,35 @@ public:
      * @brief Incrementa el contador de encuentros ganados del individuo en un torneo
      */
     void incrementWonMatchesCounter();
+
+    /**
+     * @brief Sobrecarga del operador = para asignar un individuo
+     * @return nuevo individuo
+     */
+    //Individual& operator = (const Individual &ind);
+
+    /**
+     * @brief Retorna la probabilidad de encontrar al menos un AP en el canal pasado como argumento.
+     *
+     * La distribucion de probabilidad es aproximada de acuerdo al articulo que se esta estudiando
+     *
+     * @param channel Canal que se escanea
+     * @return Valor de probabilidad de encontrar al menos un AP en el canal pasado como argumento.
+     */
+    double probabilityExistAtLeastOneAp(int channel);
+
+    /**
+     * @brief Retorna la probabilidad de que el retardo del primer Probe Response sea menor que el
+     * parametro MinChannelTime
+     *
+     * La distribucion de probabilidad es aproximada de acuerdo al articulo que se esta estudiando
+     *
+     * @param delay retardo del primer Probe Response recibido
+     * @return probabilidad de que el retardo del primer Probe Response sea menor que el
+     * parametro MinChannelTime
+     */
+    double probabilityDelayLessThanMinCT(double delay);
+
 
 };
 

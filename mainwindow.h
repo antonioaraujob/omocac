@@ -4,6 +4,7 @@
 #include <QMainWindow>
 
 #include "simulation.h"
+#include "qcustomplot.h"
 
 
 namespace Ui {
@@ -43,7 +44,10 @@ public:
      */
     void populateListView();
 
-    
+
+    void setupCustomPlot(QCustomPlot *customPlot);
+
+
 public slots:
 
     /**

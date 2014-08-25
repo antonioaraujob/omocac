@@ -1,8 +1,12 @@
 #include "individual.h"
 
-#include "simulation.h"
+//#include "simulation.h"
+#include "mainwindow.h"
 
 #include <QTime>
+
+#include "scan.h"
+
 
 Individual::Individual(int numberOfApsDeployed)
 {
@@ -14,16 +18,45 @@ Individual::Individual(int numberOfApsDeployed)
     // se deben crear los 33 parametros
     // C1,Min1,Max1,AP1,C2,Min2,Max2,AP2,...,C11,Min11,Max11,AP11
 
+
+    // base de datos sqlite
+    //QString database("/home/antonio/Copy/2014/pgcomp/ia/gridCells/gridCells/test_18.1.db");
+    //QString database("/home/antonio/desarrollo/iaa/git/omocac/test_18.1.db");
+    QString database("test_18.1.db");
+
+    // tipo de experimento para extraer las muestras: full -> full scanning
+    QString experiment("full");
+
+    Scan scan(database.toStdString(),experiment.toStdString());
+    scan.init();
+
+    //Scan::ScanResults results = scan.execute(11, 10, 30);
+    Scan::ScanResults results;
+
+    std::cout << results.size() << " results: " << std::endl;
+
     int randomChannel = 0;
+    double minChannelTime = 0;
+    double maxChannelTime = 0;
+
     for (int i=0; i<11; i++)
     {
         randomChannel = getRandomChannel();
         parametersList.append(randomChannel);
 
-        parametersList.append(getRandomMinChannelTime());
-        parametersList.append(getRandomMaxChannelTime());
+        minChannelTime = getRandomMinChannelTime();
+        maxChannelTime = getRandomMaxChannelTime();
+        parametersList.append(minChannelTime);
+        parametersList.append(maxChannelTime);
 
-        parametersList.append(getAPNumberOnChannel(numberOfApsDeployed, randomChannel));
+        //parametersList.append(getAPNumberOnChannel(numberOfApsDeployed, randomChannel));
+
+        //qDebug("**channel: %d, min: %f, max: %f",randomChannel, minChannelTime, maxChannelTime);
+        results = scan.execute(randomChannel, minChannelTime, maxChannelTime);
+        //qDebug("**numero de APs encontrados en el canal %d: %d",randomChannel, results.size());
+        //std::cout << " numero de APs encontrados en el canal: " << randomChannel << ": " << results.size() << std::endl;
+        //qDebug("**scan.execute(%d, %f, %f)=%d",randomChannel, minChannelTime, maxChannelTime, results.size());
+        parametersList.append(results.size());
 
         wonMatchesCounter = 0;
     }
@@ -32,11 +65,12 @@ Individual::Individual(int numberOfApsDeployed)
     calculatePerformanceValue();
 
     // calcular el valor de desempeno para la descubierta
-    setPerformanceDiscovery(getRandomMaxChannelTime());
+    //setPerformanceDiscovery(getRandomMaxChannelTime());
+    calculateDiscoveryValue();
 
     // calcular el valor de desempeno para la latencia
-    setPerformanceLatency(getRandomMaxChannelTime());
-
+    //setPerformanceLatency(getRandomMaxChannelTime());
+    calculateLatencyValue();
 }
 
 
@@ -213,6 +247,38 @@ void Individual::calculatePerformanceValue()
 
 }
 
+void Individual::calculateDiscoveryValue()
+{
+
+    double api = 0;
+    double discovery = 0;
+
+    for (int i=0; i<11; i++)
+    {
+        api = parametersList.at((i*4)+3);
+        discovery = discovery + api;
+    }
+    performanceDiscovery = discovery;
+}
+
+void Individual::calculateLatencyValue()
+{
+    int channel = 0;
+    double minChannelTime = 0;
+    double maxChannelTime = 0;
+    double latency = 0;
+
+    for (int i=0; i<11; i++)
+    {
+        channel = parametersList.at((i*4));
+        minChannelTime = parametersList.at((i*4)+1);
+        maxChannelTime = parametersList.at((i*4)+2);
+        latency = latency + minChannelTime + (probabilityDelayLessThanMinCT(minChannelTime)*probabilityExistAtLeastOneAp(channel)*maxChannelTime);
+    }
+    performanceLatency = latency;
+}
+
+
 double Individual::getPerformanceValue()
 {
     return performanceValue;
@@ -225,7 +291,7 @@ void Individual::setPerformanceDiscovery(double performance)
 }
 
 
-double Individual::getPerformanceDiscovery()
+double Individual::getPerformanceDiscovery() const
 {
     return performanceDiscovery;
 }
@@ -236,7 +302,7 @@ void Individual::setPerformanceLatency(double performance)
 }
 
 
-double Individual::getPerformanceLatency()
+double Individual::getPerformanceLatency() const
 {
     return performanceLatency;
 }
@@ -249,12 +315,12 @@ void Individual::setParameter(int i, double value)
     parametersList.replace(i,value);
 }
 
-double Individual::getParameter(int i)
+double Individual::getParameter(int i) const
 {
     return parametersList.at(i);
 }
 
-int Individual::getNumberOfParameters()
+int Individual::getNumberOfParameters() const
 {
     return parametersList.count();
 }
@@ -273,3 +339,122 @@ void Individual::incrementWonMatchesCounter()
 {
     wonMatchesCounter++;
 }
+
+/*
+Individual& Individual::operator = (const Individual &ind)
+{
+    for (int i=0;i<ind.getNumberOfParameters();i++)
+    {
+        this->setParameter(i,ind.getParameter(i));
+    }
+    this->setPerformanceDiscovery(ind.getPerformanceDiscovery());
+    this->setPerformanceLatency(ind.getPerformanceLatency());
+
+    return *this;
+}
+*/
+
+double Individual::probabilityExistAtLeastOneAp(int channel)
+{
+    //qDebug("Individual::probabilityExistAtLeastOneAp");
+    double probability = 0;
+
+    if (channel == 1)
+        probability = 0.82;
+    else if (channel == 2)
+        probability = 0.09;
+    else if (channel == 3)
+        probability = 0.35;
+    else if (channel == 4)
+        probability = 0.1;
+    else if (channel == 5)
+        probability = 0.11;
+    else if (channel == 6)
+        probability = 0.92;
+    else if (channel == 7)
+        probability = 0.12;
+    else if (channel == 8)
+        probability = 0.13;
+    else if (channel == 9)
+        probability = 0.45;
+    else if (channel == 10)
+        probability = 0.4;
+    else if (channel == 11)
+        probability = 0.83;
+    else
+        probability = 0;
+
+    return probability;
+}
+
+double Individual::probabilityDelayLessThanMinCT(double delay)
+{
+    //qDebug("Individual::probabilityDelayLessThanMinCT");
+
+    double probability = 0;
+
+    if (delay == 0)
+        probability = 0;
+    else if (delay == 1)
+        probability = 0.01;
+    else if (delay == 2)
+        probability = 0.03;
+    else if (delay == 3)
+        probability = 0.5;
+    else if (delay == 4)
+        probability = 0.68;
+    else if (delay == 5)
+        probability = 0.72;
+    else if (delay == 6)
+        probability = 0.79;
+    else if (delay == 7)
+        probability = 0.82;
+    else if (delay == 8)
+        probability = 0.84;
+    else if (delay == 9)
+        probability = 0.88;
+    else if (delay == 10)
+        probability = 0.89;
+    else if (delay == 11)
+        probability = 0.9;
+    else if (delay == 12)
+        probability = 0.91;
+    else if (delay == 13)
+        probability = 0.92;
+    else if (delay == 14)
+        probability = 0.93;
+    else if (delay == 15)
+        probability = 0.94;
+    else if (delay == 16)
+        probability = 0.95;
+    else if (delay == 17)
+        probability = 0.96;
+    else if (delay == 18)
+        probability = 0.97;
+    else if (delay == 19)
+        probability = 0.98;
+    else if (delay == 20)
+        probability = 0.99;
+    else if (delay == 21)
+        probability = 0.99;
+    else if (delay == 22)
+        probability = 0.99;
+    else if (delay == 23)
+        probability = 0.99;
+    else if (delay == 24)
+        probability = 0.99;
+    else if (delay == 25)
+        probability = 1;
+    else if (delay > 25)
+        probability =  1;
+    else
+        probability = 0;
+
+    return probability;
+}
+
+
+
+
+
+

@@ -2,8 +2,11 @@
 #define MUTATION_H
 
 #include <QList>
+#include <QHash>
 
 #include "individual.h"
+
+#include "scan.h"
 
 /**
  * @brief Clase que modela la variacion de la poblacion para cada generacion
@@ -17,6 +20,14 @@ private:
      */
     QList<Individual *> newPopulation;
 
+    /**
+     * @brief Diccionario para mantener registro de los canales que ya se han utilizado
+     * en un proceso de mutacion.
+     *
+     * Se utiliza para evitar que en la mutacion de parametros de un individuo se asignen
+     * canales que ya se utilizaron previamente
+     */
+    QHash<int, bool> channelsUsedForMutation;
 
 public:
 
@@ -64,9 +75,12 @@ public:
      * @param index indice del parametro a mutar
      * @param mean media de la distribucion normal
      * @param std desviacion estandar de la distribucion normal
+     * @param currentParameterValue valor actual del parametro a mutar
+     * @param offspring Individuo hijo sobre el cual se mutan parametros
+     *
      * @return valor del parametro mutado
      */
-    int mutateIndividualParameter(int index, int mean, double std);
+    int mutateIndividualParameter(int index, int mean, double std, double currentParameterValue, Individual *offspring);
 
     /**
      * @brief Retorna verdadero si el parametro a revisar de un individuo corresponde a un canal
@@ -101,6 +115,14 @@ public:
      */
     void printNewPopulation();
 
+    /**
+     * @brief Retorna un nuevo valor de descubrimiento de AP de los experimentos
+     * @param channel canal en el que se esta escuchando
+     * @param minChannelTime minChannelTime
+     * @param maxChannelTime maxChannelTime
+     * @return
+     */
+    int getNewParameterAPs(int channel, double minChannelTime, double maxChannelTime);
 };
 
 #endif // MUTATION_H

@@ -6,12 +6,14 @@
 
 QT       += core gui
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 TARGET = omocac
 TEMPLATE = app
 
 QMAKE_CXXFLAGS += -std=c++11
+
+LIBS += -lsqlite3
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -22,7 +24,8 @@ SOURCES += main.cpp\
     simulation.cpp \
     gridsubinterval.cpp \
     mutation.cpp \
-    selection.cpp
+    selection.cpp \
+    qcustomplot.cpp
 
 HEADERS  += mainwindow.h \
     individual.h \
@@ -32,6 +35,7 @@ HEADERS  += mainwindow.h \
     simulation.h \
     gridsubinterval.h \
     mutation.h \
-    selection.h
+    selection.h \
+    qcustomplot.h
 
 FORMS    += mainwindow.ui
