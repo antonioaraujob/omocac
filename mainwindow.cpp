@@ -314,8 +314,12 @@ void MainWindow::setupCustomPlot(QCustomPlot *customPlot)
 
     // create graph and assign data to it:
     customPlot->addGraph();
-    customPlot->graph(0)->setPen(QPen(Qt::red)); // line color blue for first graph
+    customPlot->graph(0)->setPen(QPen(Qt::blue)); // line color blue for first graph
     customPlot->graph(0)->setData(discovery, latency);
+
+    customPlot->graph(0)->setLineStyle(QCPGraph::lsLine);
+    customPlot->graph(0)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCross, Qt::red, 4));
+
     // give the axes some labels:
     customPlot->xAxis->setLabel("Descubierta");
     customPlot->yAxis->setLabel("Latencia");
