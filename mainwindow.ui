@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>832</width>
-    <height>577</height>
+    <width>835</width>
+    <height>683</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
       <x>10</x>
       <y>10</y>
       <width>401</width>
-      <height>291</height>
+      <height>401</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -39,7 +39,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>Parametros del Algoritmo Cultural</string>
+      <string>Parámetros del Algoritmo Cultural</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -51,21 +51,28 @@
        <x>20</x>
        <y>40</y>
        <width>371</width>
-       <height>248</height>
+       <height>356</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="gridLayout">
+      <item row="7" column="1">
+       <widget class="QCheckBox" name="checkBoxDirectedMutation">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>Numero maximo de generaciones</string>
+         <string>Número máximo de generaciones</string>
         </property>
        </widget>
       </item>
       <item row="0" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>Tamaño de la poblacion</string>
+         <string>Tamaño de la población</string>
         </property>
        </widget>
       </item>
@@ -85,14 +92,21 @@
       <item row="2" column="0">
        <widget class="QLabel" name="label_5">
         <property name="text">
-         <string>Desviacion estandar</string>
+         <string>Desviación estándar</string>
         </property>
        </widget>
       </item>
       <item row="6" column="0">
        <widget class="QLabel" name="label_10">
         <property name="text">
-         <string>Numero de encuentros por individuo</string>
+         <string>Número de encuentros por individuo</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_7">
+        <property name="text">
+         <string>Tamaño máximo del archivo externo</string>
         </property>
        </widget>
       </item>
@@ -103,10 +117,10 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="label_7">
+      <item row="5" column="0">
+       <widget class="QLabel" name="label_9">
         <property name="text">
-         <string>Tamaño maximo del archivo externo</string>
+         <string>Frecuencia de actualización de parte normativa</string>
         </property>
        </widget>
       </item>
@@ -117,24 +131,17 @@
         </property>
        </widget>
       </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_8">
+        <property name="text">
+         <string>Número de subintervalos de rejilla</string>
+        </property>
+       </widget>
+      </item>
       <item row="1" column="1">
        <widget class="QLineEdit" name="lineEditGenerationNumber">
         <property name="text">
          <string>3</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="0">
-       <widget class="QLabel" name="label_9">
-        <property name="text">
-         <string>Frecuencia de actualizacion de parte normativa</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0">
-       <widget class="QLabel" name="label_8">
-        <property name="text">
-         <string>Numero de subintervalos de rejilla</string>
         </property>
        </widget>
       </item>
@@ -158,16 +165,33 @@
          <string>1</string>
         </property>
         <property name="readOnly">
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item row="7" column="0">
+      <item row="9" column="0">
        <widget class="QPushButton" name="pushButtonRun">
         <property name="text">
          <string>Ejecutar</string>
         </property>
        </widget>
+      </item>
+      <item row="7" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Utilizar mutación dirigida</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="0">
+       <widget class="QLabel" name="labelDirectedMutation">
+        <property name="text">
+         <string>Probabilidad de mutación dirigida</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="1">
+       <widget class="QLineEdit" name="lineEditDirectedMutation"/>
       </item>
      </layout>
     </widget>
@@ -176,7 +200,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>320</y>
+      <y>420</y>
       <width>811</width>
       <height>191</height>
      </rect>
@@ -236,7 +260,7 @@
       <x>420</x>
       <y>10</y>
       <width>401</width>
-      <height>291</height>
+      <height>401</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -250,8 +274,8 @@
       <rect>
        <x>10</x>
        <y>20</y>
-       <width>371</width>
-       <height>241</height>
+       <width>381</width>
+       <height>361</height>
       </rect>
      </property>
     </widget>
@@ -262,8 +286,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>832</width>
-     <height>19</height>
+     <width>835</width>
+     <height>29</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuArchivo">
@@ -310,22 +334,5 @@
   <tabstop>listViewBestIndividuals</tabstop>
  </tabstops>
  <resources/>
- <connections>
-  <connection>
-   <sender>actionSalir</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>199</x>
-     <y>149</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

@@ -52,6 +52,16 @@ public:
      */
     void doMutation(QList<Individual *> population, double std, int deployedAp);
 
+    /**
+     * @brief Ejecuta el proceso de mutacion dirigida sobre la base del conocimiento normativo
+     * del espacio de creencias.
+     *
+     * @param population poblacion sobre la cual se ejecuta el proceso de mutacion
+     * @param std desviacion estandar de la variable aleatoria normal
+     * @param deployedAp numero de AP desplegados en el entorno
+     * @param dMutationProbability
+     */
+    void doDirectedMutation(QList<Individual *> population, double std, int deployedAp, double dMutationProbability);
 
     /**
      * @brief Retorna la nueva poblacion luego de la variacion.

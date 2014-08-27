@@ -34,7 +34,7 @@ int Simulation::individualIdCounter = 0;
 
 
 Simulation::Simulation(int population, int extFileSize, int generations, int subintervalsGrid, int genNormative,
-                       int matches, int stdDev, int aps)
+                       int matches, int stdDev, int aps, bool dMutation, double dMutationProbability)
 {
     populationSize = population;
 
@@ -53,6 +53,10 @@ Simulation::Simulation(int population, int extFileSize, int generations, int sub
     stdDeviation = stdDev;
 
     deployedAPs = aps;
+
+    directedMutation = dMutation;
+
+    directedMutationProbability = dMutationProbability;
 
     normativePhenotipicPart = new NormativePhenotypicPart();
 
@@ -338,7 +342,15 @@ void Simulation::printGrid()
 
 void Simulation::mutatePopulation()
 {
-    mutation->doMutation(populationList, getStdDeviation(), deployedAPs);
+    // utilizar la mutación dirigida
+//    if (directedMutation)
+//    {
+//        mutation->doDirectedMutation(populationList, getStdDeviation(), deployedAPs, directedMutationProbability);
+//    }
+//    else
+//    {
+        mutation->doMutation(populationList, getStdDeviation(), deployedAPs);
+//    }
 
     mutatedPopulationList = mutation->getNewPopulation();
 
@@ -350,6 +362,7 @@ void Simulation::mutatePopulation()
     {
         QMessageBox msg;
         msg.setText("Simulation::mutatePopulation(): No se pudo abrir el archivo /tmp/algorithmResult.txt\n para escribir resultados de la ejecucion del algoritmo.");
+        msg.exec();
         return;
     }
     QTextStream out(&file);

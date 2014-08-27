@@ -44,9 +44,21 @@ public:
      */
     void populateListView();
 
-
+    /**
+     * @brief Configura el widget para generar el grafico de los individuos no dominados del
+     * archivo externo.
+     *  Se esta utilizando QCustomPlot
+     *
+     * @param customPlot
+     */
     void setupCustomPlot(QCustomPlot *customPlot);
 
+    /**
+     * @brief Valida los parametros antes de ejecutar el algoritmo
+     *
+     *  @return Verdadero si todos los campos son validos
+     */
+    bool validateFields();
 
 public slots:
 
@@ -56,6 +68,16 @@ public slots:
      */
     void executeAlgorithm();
 
+
+    /**
+     * @brief Slot para habilitar o deshabilitar el campo para introducir el valor de la
+     *  probabilidad de mutacion dirigida
+     * @param state Estado del check box
+     */
+    void activateDirectedMutation(int state);
+
+
+    void checkPopulationSize(const QString & str);
 
 private:
     Ui::MainWindow *ui;

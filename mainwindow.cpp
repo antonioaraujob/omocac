@@ -10,6 +10,7 @@
 #include <QTextStream>
 #include <QStringListModel>
 #include <QSet>
+#include <QDoubleValidator>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -17,7 +18,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    this->setFixedSize(832, 577);
+    this->setFixedSize(835, 683);
 
     // Validadores para los parametros del algoritmo
     QValidator * validatorPopSize = new QIntValidator(1, 1000, this);
@@ -54,9 +55,20 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->lineEditMatchPerTournament->setText(QString::number(matches));
     ui->lineEditMatchPerTournament->setToolTip("Un valor recomendado es Poblacion/2");
 
+    QDoubleValidator * validatorDirectedMutation = new QDoubleValidator(0.0, 1.0, 2, validatorDirectedMutation);
+    validatorDirectedMutation->setNotation(QDoubleValidator::StandardNotation);
+    ui->lineEditDirectedMutation->setValidator(validatorDirectedMutation);
+    ui->lineEditDirectedMutation->setToolTip("[0..1]");
+
+
 
     connect(ui->pushButtonRun, SIGNAL(clicked()), this, SLOT(executeAlgorithm()));
 
+    connect(ui->checkBoxDirectedMutation, SIGNAL(stateChanged(int)), this, SLOT(activateDirectedMutation(int)));
+    ui->labelDirectedMutation->setEnabled(false);
+    ui->lineEditDirectedMutation->setEnabled(false);
+
+    connect(ui->lineEditPopulationSize, SIGNAL(textChanged(const QString & )), this, SLOT(checkPopulationSize(const QString &)));
 
 
 }
@@ -69,15 +81,23 @@ MainWindow::~MainWindow()
 
 void MainWindow::executeAlgorithm()
 {
+    if (!validateFields())
+    {
+        return;
+    }
+
+
     // creacion del objeto simulacion
     simulation = new Simulation(ui->lineEditPopulationSize->text().toInt(),
-                                             ui->lineEditExternalFileSize->text().toInt(),
-                                             ui->lineEditGenerationNumber->text().toInt(),
-                                             ui->lineEditGridSubintervals->text().toInt(),
-                                             ui->lineEditGnormative->text().toInt(),
-                                             ui->lineEditPopulationSize->text().toInt()/2,
-                                             ui->lineEditMutationStd->text().toInt(),
-                                             /*ui->lineEditApsNumber->text().toInt()*/25);
+                                ui->lineEditExternalFileSize->text().toInt(),
+                                ui->lineEditGenerationNumber->text().toInt(),
+                                ui->lineEditGridSubintervals->text().toInt(),
+                                ui->lineEditGnormative->text().toInt(),
+                                ui->lineEditPopulationSize->text().toInt()/2,
+                                ui->lineEditMutationStd->text().toInt(),
+                                /*ui->lineEditApsNumber->text().toInt()*/25,
+                                ui->checkBoxDirectedMutation->isChecked(),
+                                ui->lineEditDirectedMutation->text().toDouble());
 
     qsrand((uint)QTime::currentTime().msec());
 
@@ -372,6 +392,97 @@ void MainWindow::setupCustomPlot(QCustomPlot *customPlot)
 */
 
 }
+
+
+bool MainWindow::validateFields()
+{
+    bool validate = true;
+
+    QMessageBox msg;
+    QString message;
+    message.append("Los siguientes campos deben estar asignados:\n");
+
+    if (ui->lineEditPopulationSize->text().isEmpty())
+    {
+        message.append("Tamaño de la población\n");
+        validate = false;
+    }
+    if (ui->lineEditGenerationNumber->text().isEmpty())
+    {
+        message.append("Número máximo de generaciones\n");
+        validate = false;
+    }
+    if (ui->lineEditMutationStd->text().isEmpty())
+    {
+        message.append("Desviación estándar\n");
+        validate = false;
+    }
+    if (ui->lineEditExternalFileSize->text().isEmpty())
+    {
+        message.append("Tamaño máximo del archivo externo\n");
+        validate = false;
+    }
+    if (ui->lineEditGridSubintervals->text().isEmpty())
+    {
+        message.append("Número de subintervalos de rejilla\n");
+        validate = false;
+    }
+    if (ui->lineEditGnormative->text().isEmpty())
+    {
+        message.append("Frecuencia de actualización de parte normativa\n");
+        validate = false;
+    }
+    if (ui->lineEditMatchPerTournament->text().isEmpty())
+    {
+        message.append("Número de encuentros por individuo\n");
+        validate = false;
+    }
+    if (ui->checkBoxDirectedMutation->isChecked())
+    {
+        if (ui->lineEditDirectedMutation->text().isEmpty())
+        {
+            message.append("Probabilidad de mutación dirigida\n");
+            validate = false;
+        }
+    }
+
+    msg.setText(message);
+
+    if (!validate)
+        msg.exec();
+
+    return validate;
+}
+
+void MainWindow::activateDirectedMutation(int state)
+{
+    qDebug("MainWindow::activateDirectedMutation: state: %d",state);
+
+    if (state == 0)
+    {
+        ui->labelDirectedMutation->setEnabled(false);
+        ui->lineEditDirectedMutation->setEnabled(false);
+    }
+    else if(state == 2)
+    {
+        ui->labelDirectedMutation->setEnabled(true);
+        ui->lineEditDirectedMutation->setEnabled(true);
+    }
+}
+
+void MainWindow::checkPopulationSize(const QString & str)
+{
+    int matches = str.toInt()/2;
+    ui->lineEditMatchPerTournament->setText(QString::number(matches));
+
+}
+
+
+
+
+
+
+
 
 /*
     // secuencia de scanning aleatoria

@@ -106,6 +106,16 @@ private:
     ExternalFile * externalFile;
 
     /**
+     * @brief Verdadero si se utilizara la mutacion dirigida
+     */
+    bool directedMutation;
+
+    /**
+     * @brief Probabilidad de ocurrencia de la mutacion dirigida
+     */
+    double directedMutationProbability;
+
+    /**
      * @brief Mutacion de la poblacion.
      *
      * Este objeto se encargara de crear una nueva poblacion de tamano 2p a partir
@@ -142,10 +152,13 @@ public:
      * @param matches numero de torneos por individuo
      * @param stdDev desviacion estandar de la distribucion normal para la mutacion gausiana
      * @param aps numero de APs desplegados en el entorno
+     * @param directedMutation Verdadero si se utilizara la mutacion dirigida
+     * @param directedMutationProbability Probabilidad de ocurrencia de la mutacion dirigida
+     *
      *
      */
     Simulation(int population, int extFileSize, int generations, int subintervalsGrid, int genNormative,
-               int matches, int stdDev, int aps);
+               int matches, int stdDev, int aps, bool dMutation, double dMutationProbability);
 
     /**
      * @brief Destructor de la clase

@@ -80,11 +80,16 @@ void ExternalFile::addNonDominatedIndividuals(QList<Individual *> nonDominatedLi
         // del archivo externo, entonces el individuo no se debe agregar
         if ( !isNewIndividualDominatedByExternalFile(newIndividual) )
         {
+
+            if (externalFileNonDominatedList.count() < maxExternalFileSize)
+            {
+
             qDebug(" individuo no esta dominado por el archivo externo; se inserta");
             externalFileNonDominatedList.append(newIndividual);
 
             // agregar el individuo nuevo en la lista de individuos de la generacion
             currentGenerationIndividualList.append(newIndividual);
+            }
 
         }
         // 2) Si newIndividual domina a algun individuo en el archivo externo, entonces

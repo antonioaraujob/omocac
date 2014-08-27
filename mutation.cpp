@@ -71,6 +71,17 @@ void Mutation::doMutation(QList<Individual *> population, double std, int deploy
 }
 
 
+void Mutation::doDirectedMutation(QList<Individual *> population, double std,
+                                  int deployedAp, double dMutationProbability)
+{
+    qDebug("Mutation::doDirectedMutation con probabilidad %f", dMutationProbability);
+
+
+
+
+}
+
+
 QList<Individual *> Mutation::getNewPopulation()
 {
     return newPopulation;
